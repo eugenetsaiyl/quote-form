@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>报价表单 - Pro Panel</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  min-height: 100vh;
+  padding: 40px 20px;
+  color: #fff;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 40px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 32px;
+  color: #68EFFB;
+  text-shadow: 0 0 20px rgba(104, 239, 251, 0.3);
+}
+
+.subtitle {
+  text-align: center;
+  margin-bottom: 40px;
+  opacity: 0.7;
+  font-size: 14px;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group.hidden {
+  display: none;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #68EFFB;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.floor-label {
+  font-size: 16px;
+  color: #68EFFB;
+  margin: 30px 0 20px 0;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(104, 239, 251, 0.3);
+}
+
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+  width: 100%;
+  padding: 14px 18px;
+  border: 2px solid rgba(104, 239, 251, 0.3);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  font-size: 16px;
+  transition: all 0.3s;
+  font-family: inherit;
+}
+
+select {
+  cursor: pointer;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #68EFFB;
+  box-shadow: 0 0 20px rgba(104, 239, 251, 0.2);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.radio-group {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.radio-option {
+  flex: 1;
+  min-width: 140px;
+}
+
+.radio-option input[type="radio"] {
+  display: none;
+}
+
+.radio-option label {
+  display: block;
+  padding: 14px 20px;
+  border: 2px solid rgba(104, 239, 251, 0.3);
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: rgba(255, 255, 255, 0.03);
+  margin: 0;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.radio-option input[type="radio"]:checked + label {
+  background: rgba(104, 239, 251, 0.2);
+  border-color: #68EFFB;
+  box-shadow: 0 0 20px rgba(104, 239, 251, 0.3);
+}
+
+.radio-option label:hover {
+  border-color: #68EFFB;
+}
+
+.price-display {
+  padding: 14px 18px;
+  border: 2px solid rgba(104, 239, 251, 0.5);
+  border-radius: 10px;
+  background: rgba(104, 239, 251, 0.1);
+  color: #68EFFB;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.special-price-input {
+  display: none;
+  margin-top: 10px;
+}
+
+.special-price-input.show {
+  display: block;
+}
+
+.btn-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 35px;
+}
+
+button {
+  flex: 1;
+  padding: 16px 30px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-generate {
+  background: linear-gradient(135deg, #68EFFB, #4ec9d6);
+  color: #1a1a2e;
+  box-shadow: 0 4px 20px rgba(104, 239, 251, 0.3);
+}
+
+.btn-generate:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(104, 239, 251, 0.4);
+}
+
+.btn-reset {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-reset:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.output {
+  margin-top: 30px;
+  padding: 25px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  border: 2px solid rgba(104, 239, 251, 0.3);
+  display: none;
+}
+
+.output.show {
+  display: block;
+}
+
+.output-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.output-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #68EFFB;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-copy {
+  padding: 8px 16px;
+  background: rgba(104, 239, 251, 0.2);
+  border: 1px solid #68EFFB;
+  border-radius: 6px;
+  color: #68EFFB;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-copy:hover {
+  background: rgba(104, 239, 251, 0.3);
+}
+
+.btn-copy.copied {
+  background: rgba(104, 239, 251, 0.4);
+}
+
+.output-text {
+  font-family: 'SF Mono', Monaco, monospace;
+  font-size: 14px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.hint {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 13px;
+  opacity: 0.6;
+  font-style: italic;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>📋 报价表单</h1>
+  <div class="subtitle">填写资料后发送给 Muse</div>
+  
+  <form id="quoteForm">
+    <!-- 层数选择 -->
+    <div class="form-group">
+      <label>层数</label>
+      <div class="radio-group">
+        <div class="radio-option">
+          <input type="radio" id="single" name="storey" value="Single Storey" checked>
+          <label for="single">Single Storey</label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" id="double" name="storey" value="Double Storey">
+          <label for="double">Double Storey</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Single Storey 材料 -->
+    <div id="singleMaterials" class="materials-section">
+      <div class="form-group">
+        <label>产品类型</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" id="single_propanel" name="single_product" value="Pro Panel" checked>
+            <label for="single_propanel">Pro Panel</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="single_hebel" name="single_product" value="Hebel">
+            <label for="single_hebel">Hebel</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>厚度</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" id="single_50mm" name="single_thickness" value="50mm" checked>
+            <label for="single_50mm">50mm</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="single_75mm" name="single_thickness" value="75mm">
+            <label for="single_75mm">75mm</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Render 层数</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" id="single_render2" name="single_render" value="2" checked>
+            <label for="single_render2">2层</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="single_render3" name="single_render" value="3">
+            <label for="single_render3">3层</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>价格选项</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" id="single_normalPrice" name="single_priceType" value="normal" checked>
+            <label for="single_normalPrice">Normal Price</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="single_specialPrice" name="single_priceType" value="special">
+            <label for="single_specialPrice">Special Price</label>
+          </div>
+        </div>
+        <div id="single_priceDisplay" class="price-display">$110 / m²</div>
+        <div id="single_specialPriceInput" class="special-price-input">
+          <input type="number" id="single_specialPriceValue" placeholder="输入特殊单价（例：105）">
+        </div>
+      </div>
+    </div>
+
+    <!-- Double Storey 材料 -->
+    <div id="doubleMaterials" class="materials-section" style="display:none;">
+      <!-- Ground Floor -->
+      <div class="floor-label">Ground Floor（一楼）</div>
+      
+      <div class="form-group">
+        <label>产品类型</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" id="gf_propanel" name="gf_product" value="Pro Panel" checked>
+            <label for="gf_propanel">Pro Panel</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="gf_hebel" name="gf_product" value="Hebel">
+            <label for="gf_hebel">Hebel</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>厚度</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" id="gf_50mm" name="gf_thickness" value="50mm" checked>
+            <label for="gf_50mm">50mm</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="gf_75mm" name="gf_thickness" value="75mm">
+            <label for="gf_75mm">75mm</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Render 层数</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" id="gf_render2" name="gf_render" value="2" checked>
+            <label for="gf_render2">2层</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="gf_render3" name="gf_render" value="3">
+            <label for="gf_render3">3层</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>价格选项</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" id="gf_normalPrice" name="gf_priceType" value="normal" checked>
+            <label for="gf_normalPrice">Normal Price</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="gf_specialPrice" name="gf_priceType" value="special">
+            <label for="gf_specialPrice">Special Price</label>
+          </div>
+        </div>
+        <div id="gf_priceDisplay" class="price-display">$110 / m²</div>
+        <div id="gf_specialPriceInput" class="special-price-input">
+          <input type="number" id="gf_specialPriceValue" placeholder="输入特殊单价（例：105）">
+        </div>
+      </div>
+
+      <!-- First Floor -->
+      <div class="floor-label">First Floor（二楼）</div>
+      
+      <div class="form-group">
+        <label>材料类型</label>
+        <select id="ff_material" name="ff_material">
+          <optgroup label="AAC">
+            <option value="Pro Panel 50mm">Pro Panel 50mm</option>
+            <option value="Pro Panel 75mm">Pro Panel 75mm</option>
+            <option value="Hebel 50mm">Hebel 50mm</option>
+            <option value="Hebel 75mm">Hebel 75mm</option>
+          </optgroup>
+          <optgroup label="Foam">
+            <option value="NRG Greenboard 75mm">NRG Greenboard 75mm</option>
+            <option value="NRG Greenboard 100mm">NRG Greenboard 100mm</option>
+            <option value="Masterwall foam 75mm">Masterwall foam 75mm</option>
+            <option value="Masterwall foam 100mm">Masterwall foam 100mm</option>
+            <option value="Unitex foam 75mm">Unitex foam 75mm</option>
+            <option value="Unitex foam 100mm">Unitex foam 100mm</option>
+            <option value="Dulux foam 75mm">Dulux foam 75mm</option>
+            <option value="Dulux foam 100mm">Dulux foam 100mm</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <div class="form-group" id="ff_renderGroup">
+        <label>Render 层数</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" id="ff_render2" name="ff_render" value="2" checked>
+            <label for="ff_render2">2层</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="ff_render3" name="ff_render" value="3">
+            <label for="ff_render3">3层</label>
+          </div>
+        </div>
+        <div id="ff_foamNote" class="hint" style="display:none; margin-top:10px; opacity:0.8;">Foam 固定使用 3层 render</div>
+      </div>
+
+      <div class="form-group">
+        <label>价格选项</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" id="ff_normalPrice" name="ff_priceType" value="normal" checked>
+            <label for="ff_normalPrice">Normal Price</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="ff_specialPrice" name="ff_priceType" value="special">
+            <label for="ff_specialPrice">Special Price</label>
+          </div>
+        </div>
+        <div id="ff_priceDisplay" class="price-display">$110 / m²</div>
+        <div id="ff_specialPriceInput" class="special-price-input">
+          <input type="number" id="ff_specialPriceValue" placeholder="输入特殊单价（例：105）">
+        </div>
+      </div>
+    </div>
+
+    <!-- 通用字段 -->
+    <div class="form-group">
+      <label>Builder 公司名称</label>
+      <input type="text" id="builder" placeholder="例：Tomorrow Homes" required>
+    </div>
+
+    <div class="form-group">
+      <label>地址</label>
+      <textarea id="address" placeholder="例：Lot 123, Street Name, Suburb VIC 3000" required></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>备注（选填）</label>
+      <textarea id="notes" placeholder="例：特殊要求、工期等"></textarea>
+    </div>
+
+    <div class="btn-group">
+      <button type="submit" class="btn-generate">生成报价</button>
+      <button type="reset" class="btn-reset">清空</button>
+    </div>
+  </form>
+
+  <div id="output" class="output">
+    <div class="output-header">
+      <div class="output-title">报价内容</div>
+      <button type="button" class="btn-copy" onclick="copyToClipboard()">复制</button>
+    </div>
+    <div id="outputText" class="output-text"></div>
+  </div>
+
+  <div class="hint">💡 复制后发给 Muse，她会教 Molly 制作报价单</div>
+</div>
+
+<script>
+// 定价表
+const PRICING = {
+  'Pro Panel': { '50mm': 110, '75mm': 120 },
+  'Hebel': { '50mm': 120, '75mm': 130 },
+  'Foam': { '75mm': 90, '100mm': 95 }
+};
+
+// 切换 Single/Double
+document.querySelectorAll('input[name="storey"]').forEach(input => {
+  input.addEventListener('change', function() {
+    const isSingle = this.value === 'Single Storey';
+    document.getElementById('singleMaterials').style.display = isSingle ? 'block' : 'none';
+    document.getElementById('doubleMaterials').style.display = isSingle ? 'none' : 'block';
+  });
+});
+
+// Single Storey 价格更新
+function updateSinglePrice() {
+  const product = document.querySelector('input[name="single_product"]:checked').value;
+  const thickness = document.querySelector('input[name="single_thickness"]:checked').value;
+  const priceType = document.querySelector('input[name="single_priceType"]:checked').value;
+  
+  const normalPrice = PRICING[product][thickness];
+  const priceDisplay = document.getElementById('single_priceDisplay');
+  const specialPriceInput = document.getElementById('single_specialPriceInput');
+  
+  if (priceType === 'normal') {
+    priceDisplay.style.display = 'block';
+    priceDisplay.textContent = `$${normalPrice} / m²`;
+    specialPriceInput.classList.remove('show');
+  } else {
+    priceDisplay.style.display = 'none';
+    specialPriceInput.classList.add('show');
+  }
+}
+
+document.querySelectorAll('input[name="single_product"], input[name="single_thickness"], input[name="single_priceType"]').forEach(input => {
+  input.addEventListener('change', updateSinglePrice);
+});
+
+// Ground Floor 价格更新
+function updateGFPrice() {
+  const product = document.querySelector('input[name="gf_product"]:checked').value;
+  const thickness = document.querySelector('input[name="gf_thickness"]:checked').value;
+  const priceType = document.querySelector('input[name="gf_priceType"]:checked').value;
+  
+  const normalPrice = PRICING[product][thickness];
+  const priceDisplay = document.getElementById('gf_priceDisplay');
+  const specialPriceInput = document.getElementById('gf_specialPriceInput');
+  
+  if (priceType === 'normal') {
+    priceDisplay.style.display = 'block';
+    priceDisplay.textContent = `$${normalPrice} / m²`;
+    specialPriceInput.classList.remove('show');
+  } else {
+    priceDisplay.style.display = 'none';
+    specialPriceInput.classList.add('show');
+  }
+}
+
+document.querySelectorAll('input[name="gf_product"], input[name="gf_thickness"], input[name="gf_priceType"]').forEach(input => {
+  input.addEventListener('change', updateGFPrice);
+});
+
+// First Floor 材料改变时更新价格和 Render
+document.getElementById('ff_material').addEventListener('change', function() {
+  updateFFPrice();
+  updateFFRender();
+});
+
+function updateFFPrice() {
+  const material = document.getElementById('ff_material').value;
+  const priceType = document.querySelector('input[name="ff_priceType"]:checked').value;
+  
+  let normalPrice;
+  if (material.includes('foam')) {
+    const thickness = material.includes('100mm') ? '100mm' : '75mm';
+    normalPrice = PRICING['Foam'][thickness];
+  } else {
+    const product = material.includes('Pro Panel') ? 'Pro Panel' : 'Hebel';
+    const thickness = material.includes('75mm') ? '75mm' : '50mm';
+    normalPrice = PRICING[product][thickness];
+  }
+  
+  const priceDisplay = document.getElementById('ff_priceDisplay');
+  const specialPriceInput = document.getElementById('ff_specialPriceInput');
+  
+  if (priceType === 'normal') {
+    priceDisplay.style.display = 'block';
+    priceDisplay.textContent = `$${normalPrice} / m²`;
+    specialPriceInput.classList.remove('show');
+  } else {
+    priceDisplay.style.display = 'none';
+    specialPriceInput.classList.add('show');
+  }
+}
+
+function updateFFRender() {
+  const material = document.getElementById('ff_material').value;
+  const isFoam = material.includes('foam');
+  const renderGroup = document.getElementById('ff_renderGroup');
+  const foamNote = document.getElementById('ff_foamNote');
+  
+  if (isFoam) {
+    // Foam 固定 3层，隐藏选项
+    document.querySelectorAll('input[name="ff_render"]').forEach(input => {
+      input.parentElement.parentElement.style.display = 'none';
+    });
+    document.getElementById('ff_render3').checked = true;
+    foamNote.style.display = 'block';
+  } else {
+    // AAC 显示 2/3层选项
+    document.querySelectorAll('input[name="ff_render"]').forEach(input => {
+      input.parentElement.parentElement.style.display = 'block';
+    });
+    foamNote.style.display = 'none';
+  }
+}
+
+document.querySelectorAll('input[name="ff_priceType"]').forEach(input => {
+  input.addEventListener('change', updateFFPrice);
+});
+
+// 表单提交
+document.getElementById('quoteForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const storey = document.querySelector('input[name="storey"]:checked').value;
+  const builder = document.getElementById('builder').value;
+  const address = document.getElementById('address').value;
+  const notes = document.getElementById('notes').value;
+  
+  let output = `新报价请求\n\n`;
+  output += `层数：${storey}\n\n`;
+  
+  if (storey === 'Single Storey') {
+    const product = document.querySelector('input[name="single_product"]:checked').value;
+    const thickness = document.querySelector('input[name="single_thickness"]:checked').value;
+    const render = document.querySelector('input[name="single_render"]:checked').value;
+    const priceType = document.querySelector('input[name="single_priceType"]:checked').value;
+    
+    let price;
+    if (priceType === 'normal') {
+      price = `$${PRICING[product][thickness]} (Normal Price)`;
+    } else {
+      const specialValue = document.getElementById('single_specialPriceValue').value;
+      if (!specialValue) {
+        alert('请输入特殊单价');
+        return;
+      }
+      price = `$${specialValue} (Special Price)`;
+    }
+    
+    output += `产品：${product} ${thickness}\n`;
+    output += `Render：${render}层\n`;
+    output += `单价：${price}\n`;
+  } else {
+    // Ground Floor
+    const gf_product = document.querySelector('input[name="gf_product"]:checked').value;
+    const gf_thickness = document.querySelector('input[name="gf_thickness"]:checked').value;
+    const gf_render = document.querySelector('input[name="gf_render"]:checked').value;
+    const gf_priceType = document.querySelector('input[name="gf_priceType"]:checked').value;
+    
+    let gf_price;
+    if (gf_priceType === 'normal') {
+      gf_price = `$${PRICING[gf_product][gf_thickness]} (Normal Price)`;
+    } else {
+      const specialValue = document.getElementById('gf_specialPriceValue').value;
+      if (!specialValue) {
+        alert('请输入 Ground Floor 特殊单价');
+        return;
+      }
+      gf_price = `$${specialValue} (Special Price)`;
+    }
+    
+    output += `Ground Floor：${gf_product} ${gf_thickness}\n`;
+    output += `Ground Floor Render：${gf_render}层\n`;
+    output += `Ground Floor 单价：${gf_price}\n\n`;
+    
+    // First Floor
+    const ff_material = document.getElementById('ff_material').value;
+    const ff_render = document.querySelector('input[name="ff_render"]:checked').value;
+    const ff_priceType = document.querySelector('input[name="ff_priceType"]:checked').value;
+    
+    let ff_price;
+    if (ff_priceType === 'normal') {
+      if (ff_material.includes('foam')) {
+        const thickness = ff_material.includes('100mm') ? '100mm' : '75mm';
+        ff_price = `$${PRICING['Foam'][thickness]} (Normal Price)`;
+      } else {
+        const product = ff_material.includes('Pro Panel') ? 'Pro Panel' : 'Hebel';
+        const thickness = ff_material.includes('75mm') ? '75mm' : '50mm';
+        ff_price = `$${PRICING[product][thickness]} (Normal Price)`;
+      }
+    } else {
+      const specialValue = document.getElementById('ff_specialPriceValue').value;
+      if (!specialValue) {
+        alert('请输入 First Floor 特殊单价');
+        return;
+      }
+      ff_price = `$${specialValue} (Special Price)`;
+    }
+    
+    output += `First Floor：${ff_material}\n`;
+    output += `First Floor Render：${ff_render}层\n`;
+    output += `First Floor 单价：${ff_price}\n`;
+  }
+  
+  output += `\nBuilder：${builder}\n`;
+  output += `地址：${address}\n`;
+  if (notes) {
+    output += `备注：${notes}\n`;
+  }
+  output += `\n请制作报价单`;
+  
+  document.getElementById('outputText').textContent = output;
+  document.getElementById('output').classList.add('show');
+  document.getElementById('output').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+});
+
+// 重置表单
+document.getElementById('quoteForm').addEventListener('reset', function() {
+  document.getElementById('output').classList.remove('show');
+  document.querySelector('.btn-copy').textContent = '复制';
+  document.querySelector('.btn-copy').classList.remove('copied');
+  setTimeout(() => {
+    updateSinglePrice();
+    updateGFPrice();
+    updateFFPrice();
+    updateFFRender();
+  }, 10);
+});
+
+// 复制到剪贴板
+function copyToClipboard() {
+  const text = document.getElementById('outputText').textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    const btn = document.querySelector('.btn-copy');
+    btn.textContent = '已复制 ✓';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = '复制';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+// 初始化
+updateSinglePrice();
+updateGFPrice();
+updateFFPrice();
+updateFFRender();
+</script>
+</body>
+</html>
