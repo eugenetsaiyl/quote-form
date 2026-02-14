@@ -318,6 +318,20 @@ button {
       </div>
 
       <div class="form-group">
+        <label>Batten 厚度</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" id="single_batten24" name="single_batten" value="24mm" checked>
+            <label for="single_batten24">24mm</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="single_batten35" name="single_batten" value="35mm">
+            <label for="single_batten35">35mm</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
         <label>Render 层数</label>
         <div class="radio-group">
           <div class="radio-option">
@@ -384,6 +398,20 @@ button {
       </div>
 
       <div class="form-group">
+        <label>Batten 厚度</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" id="gf_batten24" name="gf_batten" value="24mm" checked>
+            <label for="gf_batten24">24mm</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="gf_batten35" name="gf_batten" value="35mm">
+            <label for="gf_batten35">35mm</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
         <label>Render 层数</label>
         <div class="radio-group">
           <div class="radio-option">
@@ -440,6 +468,20 @@ button {
         </select>
       </div>
 
+      <div class="form-group" id="ff_battenGroup">
+        <label>Batten 厚度</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" id="ff_batten24" name="ff_batten" value="24mm" checked>
+            <label for="ff_batten24">24mm</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="ff_batten35" name="ff_batten" value="35mm">
+            <label for="ff_batten35">35mm</label>
+          </div>
+        </div>
+      </div>
+
       <div class="form-group" id="ff_renderGroup">
         <label>Render 层数</label>
         <div class="radio-group">
@@ -485,6 +527,24 @@ button {
       <textarea id="address" placeholder="例：Lot 123, Street Name, Suburb VIC 3000" required></textarea>
     </div>
 
+    <!-- Single Storey 净面积 -->
+    <div class="form-group" id="singleNetArea">
+      <label>净面积（选填，单位：m²）</label>
+      <input type="number" id="single_netArea" placeholder="例：150（不填则从 email 档案中查找）" step="0.01">
+    </div>
+
+    <!-- Double Storey 净面积 -->
+    <div id="doubleNetArea" style="display:none;">
+      <div class="form-group">
+        <label>Ground Floor 净面积（选填，单位：m²）</label>
+        <input type="number" id="gf_netArea" placeholder="例：80" step="0.01">
+      </div>
+      <div class="form-group">
+        <label>First Floor 净面积（选填，单位：m²）</label>
+        <input type="number" id="ff_netArea" placeholder="例：70" step="0.01">
+      </div>
+    </div>
+
     <div class="form-group">
       <label>备注（选填）</label>
       <textarea id="notes" placeholder="例：特殊要求、工期等"></textarea>
@@ -510,9 +570,9 @@ button {
 <script>
 // 定价表
 const PRICING = {
-  'Pro Panel': { '50mm': 110, '75mm': 120 },
-  'Hebel': { '50mm': 120, '75mm': 130 },
-  'Foam': { '75mm': 90, '100mm': 95 }
+  'Pro Panel': { '50mm': { '2': 110, '3': 118 }, '75mm': { '2': 120, '3': 128 } },
+  'Hebel': { '50mm': { '2': 120, '3': 128 }, '75mm': { '2': 130, '3': 138 } },
+  'Foam': { '75mm': 90, '100mm': 95 } // 所有泡沫（固定3层）
 };
 
 // 切换 Single/Double
@@ -521,6 +581,8 @@ document.querySelectorAll('input[name="storey"]').forEach(input => {
     const isSingle = this.value === 'Single Storey';
     document.getElementById('singleMaterials').style.display = isSingle ? 'block' : 'none';
     document.getElementById('doubleMaterials').style.display = isSingle ? 'none' : 'block';
+    document.getElementById('singleNetArea').style.display = isSingle ? 'block' : 'none';
+    document.getElementById('doubleNetArea').style.display = isSingle ? 'none' : 'block';
   });
 });
 
@@ -528,15 +590,16 @@ document.querySelectorAll('input[name="storey"]').forEach(input => {
 function updateSinglePrice() {
   const product = document.querySelector('input[name="single_product"]:checked').value;
   const thickness = document.querySelector('input[name="single_thickness"]:checked').value;
+  const render = document.querySelector('input[name="single_render"]:checked').value;
   const priceType = document.querySelector('input[name="single_priceType"]:checked').value;
   
-  const normalPrice = PRICING[product][thickness];
+  const normalPrice = PRICING[product][thickness][render];
   const priceDisplay = document.getElementById('single_priceDisplay');
   const specialPriceInput = document.getElementById('single_specialPriceInput');
   
   if (priceType === 'normal') {
     priceDisplay.style.display = 'block';
-    priceDisplay.textContent = `$${normalPrice} / m²`;
+    priceDisplay.textContent = `$${normalPrice} / m² (${render}层)`;
     specialPriceInput.classList.remove('show');
   } else {
     priceDisplay.style.display = 'none';
@@ -544,7 +607,7 @@ function updateSinglePrice() {
   }
 }
 
-document.querySelectorAll('input[name="single_product"], input[name="single_thickness"], input[name="single_priceType"]').forEach(input => {
+document.querySelectorAll('input[name="single_product"], input[name="single_thickness"], input[name="single_render"], input[name="single_priceType"]').forEach(input => {
   input.addEventListener('change', updateSinglePrice);
 });
 
@@ -552,15 +615,16 @@ document.querySelectorAll('input[name="single_product"], input[name="single_thic
 function updateGFPrice() {
   const product = document.querySelector('input[name="gf_product"]:checked').value;
   const thickness = document.querySelector('input[name="gf_thickness"]:checked').value;
+  const render = document.querySelector('input[name="gf_render"]:checked').value;
   const priceType = document.querySelector('input[name="gf_priceType"]:checked').value;
   
-  const normalPrice = PRICING[product][thickness];
+  const normalPrice = PRICING[product][thickness][render];
   const priceDisplay = document.getElementById('gf_priceDisplay');
   const specialPriceInput = document.getElementById('gf_specialPriceInput');
   
   if (priceType === 'normal') {
     priceDisplay.style.display = 'block';
-    priceDisplay.textContent = `$${normalPrice} / m²`;
+    priceDisplay.textContent = `$${normalPrice} / m² (${render}层)`;
     specialPriceInput.classList.remove('show');
   } else {
     priceDisplay.style.display = 'none';
@@ -568,7 +632,7 @@ function updateGFPrice() {
   }
 }
 
-document.querySelectorAll('input[name="gf_product"], input[name="gf_thickness"], input[name="gf_priceType"]').forEach(input => {
+document.querySelectorAll('input[name="gf_product"], input[name="gf_thickness"], input[name="gf_render"], input[name="gf_priceType"]').forEach(input => {
   input.addEventListener('change', updateGFPrice);
 });
 
@@ -581,15 +645,21 @@ document.getElementById('ff_material').addEventListener('change', function() {
 function updateFFPrice() {
   const material = document.getElementById('ff_material').value;
   const priceType = document.querySelector('input[name="ff_priceType"]:checked').value;
+  const render = document.querySelector('input[name="ff_render"]:checked').value;
   
   let normalPrice;
-  if (material.includes('foam')) {
+  const isFoam = material.includes('foam') || material.includes('Greenboard');
+  const isAAC = material.includes('Pro Panel') || material.includes('Hebel');
+  
+  if (isFoam) {
+    // 所有泡沫：固定价格
     const thickness = material.includes('100mm') ? '100mm' : '75mm';
     normalPrice = PRICING['Foam'][thickness];
-  } else {
+  } else if (isAAC) {
+    // AAC: First Floor +$2
     const product = material.includes('Pro Panel') ? 'Pro Panel' : 'Hebel';
     const thickness = material.includes('75mm') ? '75mm' : '50mm';
-    normalPrice = PRICING[product][thickness];
+    normalPrice = PRICING[product][thickness][render] + 2;
   }
   
   const priceDisplay = document.getElementById('ff_priceDisplay');
@@ -597,7 +667,11 @@ function updateFFPrice() {
   
   if (priceType === 'normal') {
     priceDisplay.style.display = 'block';
-    priceDisplay.textContent = `$${normalPrice} / m²`;
+    if (isFoam) {
+      priceDisplay.textContent = `$${normalPrice} / m² (3层固定)`;
+    } else if (isAAC) {
+      priceDisplay.textContent = `$${normalPrice} / m² (${render}层, 2楼+$2)`;
+    }
     specialPriceInput.classList.remove('show');
   } else {
     priceDisplay.style.display = 'none';
@@ -607,27 +681,33 @@ function updateFFPrice() {
 
 function updateFFRender() {
   const material = document.getElementById('ff_material').value;
-  const isFoam = material.includes('foam');
-  const renderGroup = document.getElementById('ff_renderGroup');
+  const isFoam = material.includes('foam') || material.includes('Greenboard');
   const foamNote = document.getElementById('ff_foamNote');
+  const battenGroup = document.getElementById('ff_battenGroup');
   
   if (isFoam) {
-    // Foam 固定 3层，隐藏选项
+    // 所有泡沫：隐藏 batten，固定 3层 render
+    battenGroup.style.display = 'none';
     document.querySelectorAll('input[name="ff_render"]').forEach(input => {
-      input.parentElement.parentElement.style.display = 'none';
+      input.disabled = true;
+      input.parentElement.style.opacity = '0.5';
+      input.parentElement.style.cursor = 'not-allowed';
     });
     document.getElementById('ff_render3').checked = true;
     foamNote.style.display = 'block';
   } else {
-    // AAC 显示 2/3层选项
+    // AAC: 显示 batten，启用 2/3层选项
+    battenGroup.style.display = 'block';
     document.querySelectorAll('input[name="ff_render"]').forEach(input => {
-      input.parentElement.parentElement.style.display = 'block';
+      input.disabled = false;
+      input.parentElement.style.opacity = '1';
+      input.parentElement.style.cursor = 'pointer';
     });
     foamNote.style.display = 'none';
   }
 }
 
-document.querySelectorAll('input[name="ff_priceType"]').forEach(input => {
+document.querySelectorAll('input[name="ff_render"], input[name="ff_priceType"]').forEach(input => {
   input.addEventListener('change', updateFFPrice);
 });
 
@@ -646,61 +726,80 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
   if (storey === 'Single Storey') {
     const product = document.querySelector('input[name="single_product"]:checked').value;
     const thickness = document.querySelector('input[name="single_thickness"]:checked').value;
+    const batten = document.querySelector('input[name="single_batten"]:checked').value;
     const render = document.querySelector('input[name="single_render"]:checked').value;
     const priceType = document.querySelector('input[name="single_priceType"]:checked').value;
     
     let price;
     if (priceType === 'normal') {
-      price = `$${PRICING[product][thickness]} (Normal Price)`;
+      price = `$${PRICING[product][thickness][render]} (Normal Price, ${render}层)`;
     } else {
       const specialValue = document.getElementById('single_specialPriceValue').value;
       if (!specialValue) {
         alert('请输入特殊单价');
         return;
       }
-      price = `$${specialValue} (Special Price)`;
+      price = `$${specialValue} (Special Price, ${render}层)`;
     }
     
     output += `产品：${product} ${thickness}\n`;
+    output += `Batten：${batten}\n`;
     output += `Render：${render}层\n`;
     output += `单价：${price}\n`;
+    
+    const single_netArea = document.getElementById('single_netArea').value;
+    if (single_netArea) {
+      output += `净面积：${single_netArea} m²\n`;
+    }
   } else {
     // Ground Floor
     const gf_product = document.querySelector('input[name="gf_product"]:checked').value;
     const gf_thickness = document.querySelector('input[name="gf_thickness"]:checked').value;
+    const gf_batten = document.querySelector('input[name="gf_batten"]:checked').value;
     const gf_render = document.querySelector('input[name="gf_render"]:checked').value;
     const gf_priceType = document.querySelector('input[name="gf_priceType"]:checked').value;
     
     let gf_price;
     if (gf_priceType === 'normal') {
-      gf_price = `$${PRICING[gf_product][gf_thickness]} (Normal Price)`;
+      gf_price = `$${PRICING[gf_product][gf_thickness][gf_render]} (Normal Price, ${gf_render}层)`;
     } else {
       const specialValue = document.getElementById('gf_specialPriceValue').value;
       if (!specialValue) {
         alert('请输入 Ground Floor 特殊单价');
         return;
       }
-      gf_price = `$${specialValue} (Special Price)`;
+      gf_price = `$${specialValue} (Special Price, ${gf_render}层)`;
     }
     
     output += `Ground Floor：${gf_product} ${gf_thickness}\n`;
+    output += `Ground Floor Batten：${gf_batten}\n`;
     output += `Ground Floor Render：${gf_render}层\n`;
-    output += `Ground Floor 单价：${gf_price}\n\n`;
+    output += `Ground Floor 单价：${gf_price}\n`;
+    
+    const gf_netArea = document.getElementById('gf_netArea').value;
+    if (gf_netArea) {
+      output += `Ground Floor 净面积：${gf_netArea} m²\n`;
+    }
+    output += `\n`;
     
     // First Floor
     const ff_material = document.getElementById('ff_material').value;
     const ff_render = document.querySelector('input[name="ff_render"]:checked').value;
     const ff_priceType = document.querySelector('input[name="ff_priceType"]:checked').value;
+    const isFoam = ff_material.includes('foam') || ff_material.includes('Greenboard');
+    const isAAC = ff_material.includes('Pro Panel') || ff_material.includes('Hebel');
     
     let ff_price;
+    
     if (ff_priceType === 'normal') {
-      if (ff_material.includes('foam')) {
+      if (isFoam) {
         const thickness = ff_material.includes('100mm') ? '100mm' : '75mm';
-        ff_price = `$${PRICING['Foam'][thickness]} (Normal Price)`;
-      } else {
+        ff_price = `$${PRICING['Foam'][thickness]} (Normal Price, 3层固定)`;
+      } else if (isAAC) {
         const product = ff_material.includes('Pro Panel') ? 'Pro Panel' : 'Hebel';
         const thickness = ff_material.includes('75mm') ? '75mm' : '50mm';
-        ff_price = `$${PRICING[product][thickness]} (Normal Price)`;
+        const basePrice = PRICING[product][thickness][ff_render];
+        ff_price = `$${basePrice + 2} (Normal Price, ${ff_render}层, 2楼+$2)`;
       }
     } else {
       const specialValue = document.getElementById('ff_specialPriceValue').value;
@@ -708,12 +807,22 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
         alert('请输入 First Floor 特殊单价');
         return;
       }
-      ff_price = `$${specialValue} (Special Price)`;
+      let renderNote = isFoam ? '3层固定' : (isAAC ? ff_render + '层, 2楼' : ff_render + '层');
+      ff_price = `$${specialValue} (Special Price, ${renderNote})`;
     }
     
     output += `First Floor：${ff_material}\n`;
+    if (!isFoam) {
+      const ff_batten = document.querySelector('input[name="ff_batten"]:checked').value;
+      output += `First Floor Batten：${ff_batten}\n`;
+    }
     output += `First Floor Render：${ff_render}层\n`;
     output += `First Floor 单价：${ff_price}\n`;
+    
+    const ff_netArea = document.getElementById('ff_netArea').value;
+    if (ff_netArea) {
+      output += `First Floor 净面积：${ff_netArea} m²\n`;
+    }
   }
   
   output += `\nBuilder：${builder}\n`;
@@ -721,7 +830,31 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
   if (notes) {
     output += `备注：${notes}\n`;
   }
-  output += `\n请制作报价单`;
+  
+  // 检查是否有缺失的净面积
+  let missingArea = false;
+  if (storey === 'Single Storey') {
+    missingArea = !document.getElementById('single_netArea').value;
+  } else {
+    const gf_area = document.getElementById('gf_netArea').value;
+    const ff_area = document.getElementById('ff_netArea').value;
+    if (!gf_area || !ff_area) {
+      missingArea = true;
+      output += `\n缺失净面积：`;
+      if (!gf_area && !ff_area) {
+        output += `Ground Floor + First Floor`;
+      } else if (!gf_area) {
+        output += `Ground Floor`;
+      } else {
+        output += `First Floor`;
+      }
+    }
+  }
+  
+  output += `\n\n请制作报价单`;
+  if (missingArea) {
+    output += `\n（需从 email 档案中查找净面积）`;
+  }
   
   document.getElementById('outputText').textContent = output;
   document.getElementById('output').classList.add('show');
