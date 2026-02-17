@@ -1003,6 +1003,23 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
   output += `\n\nBlueboard：\n`;
   output += `描述：Supply & Install & blueboards around garage opening and inside - Three coats rendering (Dulux) including two base coats with joint mesh and 1 colour coat\n`;
   
+  // Other Items
+  const otherItems = document.querySelectorAll('.other-item');
+  let hasOtherItems = false;
+  otherItems.forEach((item, index) => {
+    const desc = item.querySelector('.other-desc').value.trim();
+    const units = item.querySelector('.other-units').value.trim();
+    const price = item.querySelector('.other-price').value.trim();
+    
+    if (desc && units && price) {
+      if (!hasOtherItems) {
+        output += `\nOther Items：\n`;
+        hasOtherItems = true;
+      }
+      output += `- ${desc} | Units: ${units} | Price: $${price}\n`;
+    }
+  });
+  
   output += `\nBuilder：${builder}\n`;
   if (abn) {
     output += `ABN：${abn}\n`;
@@ -1074,23 +1091,6 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
   } else if (paymentTerms === 'none') {
     // None 選項：不輸出 payment terms
   }
-  
-  // Other Items
-  const otherItems = document.querySelectorAll('.other-item');
-  let hasOtherItems = false;
-  otherItems.forEach((item, index) => {
-    const desc = item.querySelector('.other-desc').value.trim();
-    const units = item.querySelector('.other-units').value.trim();
-    const price = item.querySelector('.other-price').value.trim();
-    
-    if (desc && units && price) {
-      if (!hasOtherItems) {
-        output += `\nOther Items：\n`;
-        hasOtherItems = true;
-      }
-      output += `- ${desc} | Units: ${units} | Price: $${price}\n`;
-    }
-  });
   
   // Category（固定輸出）
   output += `\nCategory: 4-9000\n`;
