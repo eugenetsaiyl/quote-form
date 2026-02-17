@@ -879,20 +879,22 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
     }
     
     const displayProduct = product === 'Hebel' ? 'CSR Hebel' : product;
-    output += `產品：${displayProduct} ${thickness}\n`;
-    output += `Batten：${batten}\n`;
-    output += `Render：${render}層\n`;
-    output += `單價：${price}\n`;
+    output += `產品：${displayProduct} ${thickness}, ${batten} batten, ${render}層 render\n\n`;
+    
+    output += `Description:\n`;
+    output += generateProductDescription(product, thickness, batten, render);
+    output += `\nCategory: 4-9000\n`;
     
     const single_netArea = document.getElementById('single_netArea').value;
     if (single_netArea) {
       const quoteArea = (parseFloat(single_netArea) * 1.08).toFixed(2);
-      output += `淨面積：${single_netArea} m² (報價面積：${quoteArea} m²)\n`;
+      output += `Units: ${quoteArea}\n`;
+    } else {
+      output += `Units: [需要面積]\n`;
     }
     
-    output += `\n描述：\n`;
-    output += generateProductDescription(product, thickness, batten, render);
-    output += `\nCategory: 4-9000\n`;
+    const displayPrice = priceType === 'normal' ? price.replace('$', '').replace(' (Normal Price)', '') : price.replace('$', '').replace(' (Special Price)', '');
+    output += `Unit Price: $${displayPrice}\n`;
   } else {
     // Ground Floor
     const gf_product = document.querySelector('input[name="gf_product"]:checked').value;
@@ -916,21 +918,22 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
     }
     
     const gf_displayProduct = gf_product === 'Hebel' ? 'CSR Hebel' : gf_product;
-    output += `Ground Floor：${gf_displayProduct} ${gf_thickness}\n`;
-    output += `Ground Floor Batten：${gf_batten}\n`;
-    output += `Ground Floor Render：${gf_render}層\n`;
-    output += `Ground Floor 單價：${gf_price}\n`;
+    output += `Ground Floor：${gf_displayProduct} ${gf_thickness}, ${gf_batten} batten, ${gf_render}層 render\n\n`;
+    
+    output += `Description:\n`;
+    output += generateProductDescription(gf_product, gf_thickness, gf_batten, gf_render);
+    output += `\nCategory: 4-9000\n`;
     
     const gf_netArea = document.getElementById('gf_netArea').value;
     if (gf_netArea) {
       const gf_quoteArea = (parseFloat(gf_netArea) * 1.1).toFixed(2);
-      output += `Ground Floor 淨面積：${gf_netArea} m² (報價面積：${gf_quoteArea} m²)\n`;
+      output += `Units: ${gf_quoteArea}\n`;
+    } else {
+      output += `Units: [需要面積]\n`;
     }
     
-    output += `\nGround Floor 描述：\n`;
-    output += generateProductDescription(gf_product, gf_thickness, gf_batten, gf_render);
-    output += `\nCategory: 4-9000\n`;
-    output += `\n`;
+    const gf_displayPrice = gf_priceType === 'normal' ? gf_price.replace('$', '').replace(' (Normal Price)', '') : gf_price.replace('$', '').replace(' (Special Price)', '');
+    output += `Unit Price: $${gf_displayPrice}\n\n`;
     
     // First Floor
     const ff_material = document.getElementById('ff_material').value;
@@ -961,23 +964,18 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
     }
     
     const ff_displayMaterial = ff_material.replace(' foam', '').replace('Hebel', 'CSR Hebel');
-    output += `First Floor：${ff_displayMaterial}\n`;
-    if (ff_batten) {
-      output += `First Floor Batten：${ff_batten}\n`;
-    }
-    output += `First Floor Render：${ff_render}層\n`;
-    output += `First Floor 單價：${ff_price}\n`;
+    const isFoam = ff_material.includes('foam');
     
-    const ff_netArea = document.getElementById('ff_netArea').value;
-    if (ff_netArea) {
-      const ff_quoteArea = (parseFloat(ff_netArea) * 1.1).toFixed(2);
-      output += `First Floor 淨面積：${ff_netArea} m² (報價面積：${ff_quoteArea} m²)\n`;
+    if (isFoam) {
+      output += `First Floor：${ff_displayMaterial}, ${ff_render}層 render\n\n`;
+    } else {
+      output += `First Floor：${ff_displayMaterial}, ${ff_batten} batten, ${ff_render}層 render\n\n`;
     }
     
-    output += `\nFirst Floor 描述：\n`;
+    output += `Description:\n`;
     // 解析 ff_material 格式（例如："75mm Pro Panel" 或 "100mm NRG Greenboard foam"）
     let ff_product, ff_thickness, ff_battenValue;
-    if (ff_material.includes('foam')) {
+    if (isFoam) {
       const match = ff_material.match(/(\d+mm)\s+(.+)/);
       if (match) {
         ff_thickness = match[1];
@@ -1000,12 +998,25 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
     }
     output += generateProductDescription(ff_product, ff_thickness, ff_battenValue, ff_render);
     output += `\nCategory: 4-9000\n`;
+    
+    const ff_netArea = document.getElementById('ff_netArea').value;
+    if (ff_netArea) {
+      const ff_quoteArea = (parseFloat(ff_netArea) * 1.1).toFixed(2);
+      output += `Units: ${ff_quoteArea}\n`;
+    } else {
+      output += `Units: [需要面積]\n`;
+    }
+    
+    const ff_displayPrice = ff_priceType === 'normal' ? ff_price.replace('$', '').replace(' (Normal Price)', '') : ff_price.replace('$', '').replace(' (Special Price)', '');
+    output += `Unit Price: $${ff_displayPrice}\n`;
   }
   
   // Blueboard（固定輸出）
-  output += `\n\nBlueboard：\n`;
-  output += `描述：Supply & Install & blueboards around garage opening and inside - Three coats rendering (Dulux) including two base coats with joint mesh and 1 colour coat\n`;
+  output += `\n\nBlueboard：\n\n`;
+  output += `Description:\nSupply & Install & blueboards around garage opening and inside - Three coats rendering (Dulux) including two base coats with joint mesh and 1 colour coat\n`;
   output += `Category: 4-9000\n`;
+  output += `Units: 7\n`;
+  output += `Unit Price: $45\n`;
   
   // Other Items
   const otherItems = document.querySelectorAll('.other-item');
@@ -1017,19 +1028,22 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
     
     if (desc && units && price) {
       if (!hasOtherItems) {
-        output += `\nOther Items：\n`;
+        output += `\nOther Items：\n\n`;
         hasOtherItems = true;
       }
-      output += `- ${desc} | Units: ${units} | Price: $${price}\n`;
+      output += `Description:\n${desc}\n`;
       output += `Category: 4-9000\n`;
+      output += `Units: ${units}\n`;
+      output += `Unit Price: $${price}\n\n`;
     }
   });
   
-  output += `\nBuilder：${builder}\n`;
+  output += `\nCustomer: ${builder}\n`;
   if (abn) {
-    output += `ABN：${abn}\n`;
+    output += `ABN: ${abn}\n`;
   }
-  output += `地址：${address}\n`;
+  output += `\nLine 1 地址：${address}\n\n`;
+  output += `Description: ${address}\n`;
   output += `Category: 4-9000\n`;
   
   // Note 區塊（統一標題，包含 notes + payment terms）
