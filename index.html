@@ -583,6 +583,20 @@ button {
     </div>
 
     <div class="form-group">
+      <label>需要 Blueboard 嗎？</label>
+      <div class="radio-group">
+        <div class="radio-option">
+          <input type="radio" name="includeBlueboard" id="blueboard-yes" value="yes" checked>
+          <label for="blueboard-yes">要</label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" name="includeBlueboard" id="blueboard-no" value="no">
+          <label for="blueboard-no">不要</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
       <label>Other Items（選填）</label>
       <div id="otherItemsContainer">
         <div class="other-item" style="margin-bottom:15px;">
@@ -1018,12 +1032,15 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
     output += `Unit Price: $${ff_displayPrice}\n`;
   }
   
-  // Blueboard（固定輸出）
-  output += `\n\nBlueboard：\n\n`;
-  output += `Description:\nSupply & Install & blueboards around garage opening and inside - Three coats rendering (Dulux) including two base coats with joint mesh and 1 colour coat\n`;
-  output += `Category: 4-9000\n`;
-  output += `Units: 7\n`;
-  output += `Unit Price: $45\n`;
+  // Blueboard（根據選項決定是否輸出）
+  const includeBlueboard = document.querySelector('input[name="includeBlueboard"]:checked').value;
+  if (includeBlueboard === 'yes') {
+    output += `\n\nBlueboard：\n\n`;
+    output += `Description:\nSupply & Install & blueboards around garage opening and inside - Three coats rendering (Dulux) including two base coats with joint mesh and 1 colour coat\n`;
+    output += `Category: 4-9000\n`;
+    output += `Units: 7\n`;
+    output += `Unit Price: $45\n`;
+  }
   
   // Other Items
   const otherItems = document.querySelectorAll('.other-item');
