@@ -298,7 +298,7 @@ button {
           </div>
           <div class="radio-option">
             <input type="radio" id="single_hebel" name="single_product" value="Hebel">
-            <label for="single_hebel">Hebel</label>
+            <label for="single_hebel">CSR Hebel</label>
           </div>
         </div>
       </div>
@@ -384,7 +384,7 @@ button {
           </div>
           <div class="radio-option">
             <input type="radio" id="gf_hebel" name="gf_product" value="Hebel">
-            <label for="gf_hebel">Hebel</label>
+            <label for="gf_hebel">CSR Hebel</label>
           </div>
         </div>
       </div>
@@ -464,8 +464,8 @@ button {
           <optgroup label="AAC">
             <option value="Pro Panel 50mm">Pro Panel 50mm</option>
             <option value="Pro Panel 75mm">Pro Panel 75mm</option>
-            <option value="Hebel 50mm">Hebel 50mm</option>
-            <option value="Hebel 75mm">Hebel 75mm</option>
+            <option value="Hebel 50mm">CSR Hebel 50mm</option>
+            <option value="Hebel 75mm">CSR Hebel 75mm</option>
           </optgroup>
           <optgroup label="Foam">
             <option value="NRG Greenboard 75mm">NRG Greenboard 75mm</option>
@@ -818,6 +818,11 @@ function generateProductDescription(product, thickness, batten, renderCoats) {
                  product.includes('Masterwall') || product.includes('Unitex') || 
                  product.includes('Dulux');
   
+  // Hebel → CSR Hebel
+  if (product === 'Hebel') {
+    product = 'CSR Hebel';
+  }
+  
   let line1, line2;
   
   if (isFoam) {
@@ -869,7 +874,8 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
       price = `$${specialValue} (Special Price)`;
     }
     
-    output += `產品：${product} ${thickness}\n`;
+    const displayProduct = product === 'Hebel' ? 'CSR Hebel' : product;
+    output += `產品：${displayProduct} ${thickness}\n`;
     output += `Batten：${batten}\n`;
     output += `Render：${render}層\n`;
     output += `單價：${price}\n`;
@@ -902,7 +908,8 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
       gf_price = `$${specialValue} (Special Price)`;
     }
     
-    output += `Ground Floor：${gf_product} ${gf_thickness}\n`;
+    const gf_displayProduct = gf_product === 'Hebel' ? 'CSR Hebel' : gf_product;
+    output += `Ground Floor：${gf_displayProduct} ${gf_thickness}\n`;
     output += `Ground Floor Batten：${gf_batten}\n`;
     output += `Ground Floor Render：${gf_render}層\n`;
     output += `Ground Floor 單價：${gf_price}\n`;
@@ -942,7 +949,8 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
       ff_price = `$${specialValue} (Special Price)`;
     }
     
-    output += `First Floor：${ff_material}\n`;
+    const ff_displayMaterial = ff_material.replace('Hebel', 'CSR Hebel');
+    output += `First Floor：${ff_displayMaterial}\n`;
     if (ff_batten) {
       output += `First Floor Batten：${ff_batten}\n`;
     }
