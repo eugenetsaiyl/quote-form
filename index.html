@@ -960,13 +960,23 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
     let ff_product, ff_thickness, ff_battenValue;
     if (ff_material.includes('foam')) {
       const match = ff_material.match(/(\d+mm)\s+(.+)/);
-      ff_thickness = match[1];
-      ff_product = match[2];
+      if (match) {
+        ff_thickness = match[1];
+        ff_product = match[2];
+      } else {
+        ff_thickness = '75mm';
+        ff_product = ff_material;
+      }
       ff_battenValue = null;
     } else {
       const match = ff_material.match(/(\d+mm)\s+(.+)/);
-      ff_thickness = match[1];
-      ff_product = match[2];
+      if (match) {
+        ff_thickness = match[1];
+        ff_product = match[2];
+      } else {
+        ff_thickness = '75mm';
+        ff_product = ff_material;
+      }
       ff_battenValue = ff_batten || '24mm';
     }
     output += generateProductDescription(ff_product, ff_thickness, ff_battenValue, ff_render);
@@ -989,6 +999,9 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
   
   // 輸出 Payment Terms（如果不是 none）
   if (paymentTerms !== 'none') {
+    if (!notes) {
+      output += `\n`;
+    }
     output += `Payment Terms：\n`;
   }
   
