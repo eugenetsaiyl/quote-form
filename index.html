@@ -1030,6 +1030,7 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
     output += `ABN：${abn}\n`;
   }
   output += `地址：${address}\n`;
+  output += `Category: 4-9000\n`;
   
   // Note 區塊（統一標題，包含 notes + payment terms）
   const hasNoteContent = notes || paymentTerms !== 'none';
