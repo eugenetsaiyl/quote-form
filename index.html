@@ -854,6 +854,13 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
   
   let output = `新報價請求\n\n`;
   output += `Issue Date：${getTodayDate()}\n\n`;
+  output += `Customer: ${builder}\n`;
+  if (abn) {
+    output += `ABN: ${abn}\n`;
+  }
+  output += `\nLine 1：\n`;
+  output += `Description: ${address}\n`;
+  output += `Category: 4-9000\n\n`;
   output += `層數：${storey}\n\n`;
   
   if (storey === 'Single Storey') {
@@ -1037,14 +1044,6 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
       output += `Unit Price: $${price}\n\n`;
     }
   });
-  
-  output += `\nCustomer: ${builder}\n`;
-  if (abn) {
-    output += `ABN: ${abn}\n`;
-  }
-  output += `\nLine 1 地址：${address}\n\n`;
-  output += `Description: ${address}\n`;
-  output += `Category: 4-9000\n`;
   
   // Note 區塊（統一標題，包含 notes + payment terms）
   const hasNoteContent = notes || paymentTerms !== 'none';
