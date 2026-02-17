@@ -290,7 +290,7 @@ button {
     <!-- Single Storey 材料 -->
     <div id="singleMaterials" class="materials-section">
       <div class="form-group">
-        <label>產品類型</label>
+        <label>产品类型</label>
         <div class="radio-group">
           <div class="radio-option">
             <input type="radio" id="single_propanel" name="single_product" value="Pro Panel" checked>
@@ -318,15 +318,15 @@ button {
       </div>
 
       <div class="form-group">
-        <label>Batten 厚度</label>
+        <label>Batten</label>
         <div class="radio-group">
           <div class="radio-option">
-            <input type="radio" id="single_batten24" name="single_batten" value="24mm" checked>
-            <label for="single_batten24">24mm</label>
+            <input type="radio" id="single_24mm" name="single_batten" value="24mm" checked>
+            <label for="single_24mm">24mm</label>
           </div>
           <div class="radio-option">
-            <input type="radio" id="single_batten35" name="single_batten" value="35mm">
-            <label for="single_batten35">35mm</label>
+            <input type="radio" id="single_35mm" name="single_batten" value="35mm">
+            <label for="single_35mm">35mm</label>
           </div>
         </div>
       </div>
@@ -361,6 +361,12 @@ button {
         <div id="single_specialPriceInput" class="special-price-input">
           <input type="number" id="single_specialPriceValue" placeholder="輸入特殊單價（例：105）">
         </div>
+      </div>
+
+      <div class="form-group">
+        <label>淨面積 (m²)（選填）</label>
+        <input type="number" id="single_netArea" placeholder="例：150.5" step="0.01">
+        <div class="hint" style="margin-top:8px; font-size:12px; opacity:0.7;">選填。若未填寫，Molly 會從 email 中查找。報價面積 = 淨面積 × 1.08</div>
       </div>
     </div>
 
@@ -398,15 +404,15 @@ button {
       </div>
 
       <div class="form-group">
-        <label>Batten 厚度</label>
+        <label>Batten</label>
         <div class="radio-group">
           <div class="radio-option">
-            <input type="radio" id="gf_batten24" name="gf_batten" value="24mm" checked>
-            <label for="gf_batten24">24mm</label>
+            <input type="radio" id="gf_24mm" name="gf_batten" value="24mm" checked>
+            <label for="gf_24mm">24mm</label>
           </div>
           <div class="radio-option">
-            <input type="radio" id="gf_batten35" name="gf_batten" value="35mm">
-            <label for="gf_batten35">35mm</label>
+            <input type="radio" id="gf_35mm" name="gf_batten" value="35mm">
+            <label for="gf_35mm">35mm</label>
           </div>
         </div>
       </div>
@@ -443,6 +449,12 @@ button {
         </div>
       </div>
 
+      <div class="form-group">
+        <label>Ground Floor 淨面積 (m²)（選填）</label>
+        <input type="number" id="gf_netArea" placeholder="例：150.5" step="0.01">
+        <div class="hint" style="margin-top:8px; font-size:12px; opacity:0.7;">選填。若未填寫，Molly 會從 email 中查找。報價面積 = 淨面積 × 1.1</div>
+      </div>
+
       <!-- First Floor -->
       <div class="floor-label">First Floor（二樓）</div>
       
@@ -469,15 +481,15 @@ button {
       </div>
 
       <div class="form-group" id="ff_battenGroup">
-        <label>Batten 厚度</label>
+        <label>Batten</label>
         <div class="radio-group">
           <div class="radio-option">
-            <input type="radio" id="ff_batten24" name="ff_batten" value="24mm" checked>
-            <label for="ff_batten24">24mm</label>
+            <input type="radio" id="ff_24mm" name="ff_batten" value="24mm" checked>
+            <label for="ff_24mm">24mm</label>
           </div>
           <div class="radio-option">
-            <input type="radio" id="ff_batten35" name="ff_batten" value="35mm">
-            <label for="ff_batten35">35mm</label>
+            <input type="radio" id="ff_35mm" name="ff_batten" value="35mm">
+            <label for="ff_35mm">35mm</label>
           </div>
         </div>
       </div>
@@ -514,12 +526,55 @@ button {
           <input type="number" id="ff_specialPriceValue" placeholder="輸入特殊單價（例：105）">
         </div>
       </div>
+
+      <div class="form-group">
+        <label>First Floor 淨面積 (m²)（選填）</label>
+        <input type="number" id="ff_netArea" placeholder="例：120.3" step="0.01">
+        <div class="hint" style="margin-top:8px; font-size:12px; opacity:0.7;">選填。若未填寫，Molly 會從 email 中查找。報價面積 = 淨面積 × 1.1</div>
+      </div>
     </div>
 
-    <!-- 通用欄位 -->
+    <!-- 通用字段 -->
+    <div class="form-group">
+      <label>Payment Terms</label>
+      <div class="radio-group">
+        <div class="radio-option">
+          <input type="radio" id="normalTerms" name="paymentTerms" value="normal" checked>
+          <label for="normalTerms">Normal Terms</label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" id="specialTerms" name="paymentTerms" value="special">
+          <label for="specialTerms">Special Terms</label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" id="oneoffPayment" name="paymentTerms" value="oneoff">
+          <label for="oneoffPayment">One-Off Payment</label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" id="noneTerms" name="paymentTerms" value="none">
+          <label for="noneTerms">None</label>
+        </div>
+      </div>
+      
+      <!-- Special Terms 輸入框 -->
+      <div id="specialTermsInputs" style="display:none; margin-top:15px;">
+        <div style="display:flex; gap:10px;">
+          <input type="number" id="installationPercent" placeholder="Installation %" style="flex:1;" min="0" max="100">
+          <input type="number" id="basecoatPercent" placeholder="Basecoat %" style="flex:1;" min="0" max="100">
+          <input type="number" id="texturePercent" placeholder="Texture %" style="flex:1;" min="0" max="100">
+        </div>
+        <div style="margin-top:8px; font-size:12px; opacity:0.7;">總和必須等於 100%</div>
+      </div>
+    </div>
+
     <div class="form-group">
       <label>Builder 公司名稱</label>
       <input type="text" id="builder" placeholder="例：Tomorrow Homes" required>
+    </div>
+
+    <div class="form-group">
+      <label>ABN（選填）</label>
+      <input type="text" id="abn" placeholder="例：12 345 678 901">
     </div>
 
     <div class="form-group">
@@ -527,22 +582,18 @@ button {
       <textarea id="address" placeholder="例：Lot 123, Street Name, Suburb VIC 3000" required></textarea>
     </div>
 
-    <!-- Single Storey 淨面積 -->
-    <div class="form-group" id="singleNetArea">
-      <label>淨面積（選填，單位：m²）</label>
-      <input type="number" id="single_netArea" placeholder="例：150（不填則從 email 檔案中查找）" step="0.01">
-    </div>
-
-    <!-- Double Storey 淨面積 -->
-    <div id="doubleNetArea" style="display:none;">
-      <div class="form-group">
-        <label>Ground Floor 淨面積（選填，單位：m²）</label>
-        <input type="number" id="gf_netArea" placeholder="例：80" step="0.01">
+    <div class="form-group">
+      <label>Other Items（選填）</label>
+      <div id="otherItemsContainer">
+        <div class="other-item" style="margin-bottom:15px;">
+          <input type="text" class="other-desc" placeholder="Description（例：回頭費）" style="margin-bottom:8px;">
+          <div style="display:flex; gap:10px;">
+            <input type="number" class="other-units" placeholder="No of units" style="flex:1;">
+            <input type="number" class="other-price" placeholder="Unit price ($)" style="flex:1;">
+          </div>
+        </div>
       </div>
-      <div class="form-group">
-        <label>First Floor 淨面積（選填，單位：m²）</label>
-        <input type="number" id="ff_netArea" placeholder="例：70" step="0.01">
-      </div>
+      <button type="button" id="addOtherItem" style="padding:8px 16px; background:rgba(104,239,251,0.2); border:1px solid #68EFFB; border-radius:6px; color:#68EFFB; font-size:14px; cursor:pointer; margin-top:10px;">+ 新增項目</button>
     </div>
 
     <div class="form-group">
@@ -568,11 +619,11 @@ button {
 </div>
 
 <script>
-// 定價表
+// 定价表
 const PRICING = {
-  'Pro Panel': { '50mm': { '2': 110, '3': 118 }, '75mm': { '2': 120, '3': 128 } },
-  'Hebel': { '50mm': { '2': 120, '3': 128 }, '75mm': { '2': 130, '3': 138 } },
-  'Foam': { '75mm': 90, '100mm': 95 } // 所有泡沫（固定3層）
+  'Pro Panel': { '50mm': 110, '75mm': 120 },
+  'Hebel': { '50mm': 120, '75mm': 130 },
+  'Foam': { '75mm': 90, '100mm': 95 }
 };
 
 // 切換 Single/Double
@@ -581,9 +632,35 @@ document.querySelectorAll('input[name="storey"]').forEach(input => {
     const isSingle = this.value === 'Single Storey';
     document.getElementById('singleMaterials').style.display = isSingle ? 'block' : 'none';
     document.getElementById('doubleMaterials').style.display = isSingle ? 'none' : 'block';
-    document.getElementById('singleNetArea').style.display = isSingle ? 'block' : 'none';
-    document.getElementById('doubleNetArea').style.display = isSingle ? 'none' : 'block';
   });
+});
+
+// Payment Terms 切換
+document.querySelectorAll('input[name="paymentTerms"]').forEach(input => {
+  input.addEventListener('change', function() {
+    const specialTermsInputs = document.getElementById('specialTermsInputs');
+    if (this.value === 'special') {
+      specialTermsInputs.style.display = 'block';
+    } else {
+      specialTermsInputs.style.display = 'none';
+    }
+  });
+});
+
+// 新增 Other Item
+document.getElementById('addOtherItem').addEventListener('click', function() {
+  const container = document.getElementById('otherItemsContainer');
+  const newItem = document.createElement('div');
+  newItem.className = 'other-item';
+  newItem.style.marginBottom = '15px';
+  newItem.innerHTML = `
+    <input type="text" class="other-desc" placeholder="Description（例：回頭費）" style="margin-bottom:8px; width:100%; padding:14px 18px; border:2px solid rgba(104,239,251,0.3); border-radius:10px; background:rgba(255,255,255,0.05); color:#fff; font-size:16px; font-family:inherit;">
+    <div style="display:flex; gap:10px;">
+      <input type="number" class="other-units" placeholder="No of units" style="flex:1; padding:14px 18px; border:2px solid rgba(104,239,251,0.3); border-radius:10px; background:rgba(255,255,255,0.05); color:#fff; font-size:16px; font-family:inherit;">
+      <input type="number" class="other-price" placeholder="Unit price ($)" style="flex:1; padding:14px 18px; border:2px solid rgba(104,239,251,0.3); border-radius:10px; background:rgba(255,255,255,0.05); color:#fff; font-size:16px; font-family:inherit;">
+    </div>
+  `;
+  container.appendChild(newItem);
 });
 
 // Single Storey 價格更新
@@ -593,13 +670,17 @@ function updateSinglePrice() {
   const render = document.querySelector('input[name="single_render"]:checked').value;
   const priceType = document.querySelector('input[name="single_priceType"]:checked').value;
   
-  const normalPrice = PRICING[product][thickness][render];
+  let normalPrice = PRICING[product][thickness];
+  if (render === '3') {
+    normalPrice += 8; // 3層 render +$8
+  }
+  
   const priceDisplay = document.getElementById('single_priceDisplay');
   const specialPriceInput = document.getElementById('single_specialPriceInput');
   
   if (priceType === 'normal') {
     priceDisplay.style.display = 'block';
-    priceDisplay.textContent = `$${normalPrice} / m² (${render}層)`;
+    priceDisplay.textContent = `$${normalPrice} / m²`;
     specialPriceInput.classList.remove('show');
   } else {
     priceDisplay.style.display = 'none';
@@ -618,13 +699,17 @@ function updateGFPrice() {
   const render = document.querySelector('input[name="gf_render"]:checked').value;
   const priceType = document.querySelector('input[name="gf_priceType"]:checked').value;
   
-  const normalPrice = PRICING[product][thickness][render];
+  let normalPrice = PRICING[product][thickness];
+  if (render === '3') {
+    normalPrice += 8; // 3層 render +$8
+  }
+  
   const priceDisplay = document.getElementById('gf_priceDisplay');
   const specialPriceInput = document.getElementById('gf_specialPriceInput');
   
   if (priceType === 'normal') {
     priceDisplay.style.display = 'block';
-    priceDisplay.textContent = `$${normalPrice} / m² (${render}層)`;
+    priceDisplay.textContent = `$${normalPrice} / m²`;
     specialPriceInput.classList.remove('show');
   } else {
     priceDisplay.style.display = 'none';
@@ -636,30 +721,33 @@ document.querySelectorAll('input[name="gf_product"], input[name="gf_thickness"],
   input.addEventListener('change', updateGFPrice);
 });
 
-// First Floor 材料改變時更新價格和 Render
+// First Floor 材料改變時更新價格、Batten 和 Render
 document.getElementById('ff_material').addEventListener('change', function() {
   updateFFPrice();
+  updateFFBatten();
   updateFFRender();
 });
 
 function updateFFPrice() {
   const material = document.getElementById('ff_material').value;
-  const priceType = document.querySelector('input[name="ff_priceType"]:checked').value;
   const render = document.querySelector('input[name="ff_render"]:checked').value;
+  const priceType = document.querySelector('input[name="ff_priceType"]:checked').value;
   
   let normalPrice;
-  const isFoam = material.includes('foam') || material.includes('Greenboard');
   const isAAC = material.includes('Pro Panel') || material.includes('Hebel');
   
-  if (isFoam) {
-    // 所有泡沫：固定價格
-    const thickness = material.includes('100mm') ? '100mm' : '75mm';
-    normalPrice = PRICING['Foam'][thickness];
-  } else if (isAAC) {
-    // AAC: First Floor +$2
+  if (isAAC) {
+    // AAC: First Floor 比 Ground Floor 貴 $2
     const product = material.includes('Pro Panel') ? 'Pro Panel' : 'Hebel';
     const thickness = material.includes('75mm') ? '75mm' : '50mm';
-    normalPrice = PRICING[product][thickness][render] + 2;
+    normalPrice = PRICING[product][thickness] + 2; // First Floor AAC +$2
+    if (render === '3') {
+      normalPrice += 8; // 3層 render +$8
+    }
+  } else {
+    // Foam (包括 NRG Greenboard, Masterwall, Unitex, Dulux)
+    const thickness = material.includes('100mm') ? '100mm' : '75mm';
+    normalPrice = PRICING['Foam'][thickness]; // Foam 固定3層，價格已包含
   }
   
   const priceDisplay = document.getElementById('ff_priceDisplay');
@@ -667,11 +755,7 @@ function updateFFPrice() {
   
   if (priceType === 'normal') {
     priceDisplay.style.display = 'block';
-    if (isFoam) {
-      priceDisplay.textContent = `$${normalPrice} / m² (3層固定)`;
-    } else if (isAAC) {
-      priceDisplay.textContent = `$${normalPrice} / m² (${render}層, 2樓+$2)`;
-    }
+    priceDisplay.textContent = `$${normalPrice} / m²`;
     specialPriceInput.classList.remove('show');
   } else {
     priceDisplay.style.display = 'none';
@@ -679,31 +763,39 @@ function updateFFPrice() {
   }
 }
 
-function updateFFRender() {
+function updateFFBatten() {
   const material = document.getElementById('ff_material').value;
-  const isFoam = material.includes('foam') || material.includes('Greenboard');
-  const foamNote = document.getElementById('ff_foamNote');
+  const isAAC = material.includes('Pro Panel') || material.includes('Hebel');
   const battenGroup = document.getElementById('ff_battenGroup');
   
-  if (isFoam) {
-    // 所有泡沫：隱藏 batten，固定 3層 render
+  if (isAAC) {
+    // AAC 需要 batten，顯示
+    battenGroup.style.display = 'block';
+  } else {
+    // Foam 不需要 batten，隱藏
     battenGroup.style.display = 'none';
+  }
+}
+
+function updateFFRender() {
+  const material = document.getElementById('ff_material').value;
+  const isAAC = material.includes('Pro Panel') || material.includes('Hebel');
+  const renderGroup = document.getElementById('ff_renderGroup');
+  const foamNote = document.getElementById('ff_foamNote');
+  
+  if (isAAC) {
+    // AAC 顯示 2/3層選項
     document.querySelectorAll('input[name="ff_render"]').forEach(input => {
-      input.disabled = true;
-      input.parentElement.style.opacity = '0.5';
-      input.parentElement.style.cursor = 'not-allowed';
+      input.parentElement.parentElement.style.display = 'block';
+    });
+    foamNote.style.display = 'none';
+  } else {
+    // Foam 固定 3層，隱藏選項
+    document.querySelectorAll('input[name="ff_render"]').forEach(input => {
+      input.parentElement.parentElement.style.display = 'none';
     });
     document.getElementById('ff_render3').checked = true;
     foamNote.style.display = 'block';
-  } else {
-    // AAC: 顯示 batten，啟用 2/3層選項
-    battenGroup.style.display = 'block';
-    document.querySelectorAll('input[name="ff_render"]').forEach(input => {
-      input.disabled = false;
-      input.parentElement.style.opacity = '1';
-      input.parentElement.style.cursor = 'pointer';
-    });
-    foamNote.style.display = 'none';
   }
 }
 
@@ -711,16 +803,51 @@ document.querySelectorAll('input[name="ff_render"], input[name="ff_priceType"]')
   input.addEventListener('change', updateFFPrice);
 });
 
-// 表單提交
+// 生成當天日期（DD/MM/YYYY）
+function getTodayDate() {
+  const today = new Date();
+  const day = String(today.getDate()).padStart(2, '0');
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const year = today.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
+// 生成產品描述
+function generateProductDescription(product, thickness, batten, renderCoats) {
+  const isFoam = product.includes('foam') || product.includes('Greenboard') || 
+                 product.includes('Masterwall') || product.includes('Unitex') || 
+                 product.includes('Dulux');
+  
+  let line1, line2;
+  
+  if (isFoam) {
+    line1 = `- Supply & install ${thickness} ${product} including sundries and delivery`;
+    line2 = `- Three coats rendering (Dulux) including two base coats with full mesh and 1 colour coat`;
+  } else {
+    const coatsNum = renderCoats.replace('層', '');
+    const baseCoats = coatsNum === '2' ? 'one base coat' : 'two base coats';
+    const coatsText = coatsNum === '2' ? 'Two coats' : 'Three coats';
+    
+    line1 = `- Supply & install ${thickness} ${product} with ${batten} batten including sundries, caulking, and delivery`;
+    line2 = `- ${coatsText} rendering (Dulux) including ${baseCoats} with joint mesh and 1 colour coat`;
+  }
+  
+  return `${line1}\n${line2}`;
+}
+
+// 表单提交
 document.getElementById('quoteForm').addEventListener('submit', function(e) {
   e.preventDefault();
   
   const storey = document.querySelector('input[name="storey"]:checked').value;
+  const paymentTerms = document.querySelector('input[name="paymentTerms"]:checked').value;
   const builder = document.getElementById('builder').value;
+  const abn = document.getElementById('abn').value;
   const address = document.getElementById('address').value;
   const notes = document.getElementById('notes').value;
   
   let output = `新報價請求\n\n`;
+  output += `Issue Date：${getTodayDate()}\n\n`;
   output += `層數：${storey}\n\n`;
   
   if (storey === 'Single Storey') {
@@ -732,14 +859,14 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
     
     let price;
     if (priceType === 'normal') {
-      price = `$${PRICING[product][thickness][render]} (Normal Price, ${render}層)`;
+      price = `$${PRICING[product][thickness]} (Normal Price)`;
     } else {
       const specialValue = document.getElementById('single_specialPriceValue').value;
       if (!specialValue) {
         alert('請輸入特殊單價');
         return;
       }
-      price = `$${specialValue} (Special Price, ${render}層)`;
+      price = `$${specialValue} (Special Price)`;
     }
     
     output += `產品：${product} ${thickness}\n`;
@@ -749,8 +876,12 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
     
     const single_netArea = document.getElementById('single_netArea').value;
     if (single_netArea) {
-      output += `淨面積：${single_netArea} m²\n`;
+      const quoteArea = (parseFloat(single_netArea) * 1.08).toFixed(2);
+      output += `淨面積：${single_netArea} m² (報價面積：${quoteArea} m²)\n`;
     }
+    
+    output += `\n描述：\n`;
+    output += generateProductDescription(product, thickness, batten, render);
   } else {
     // Ground Floor
     const gf_product = document.querySelector('input[name="gf_product"]:checked').value;
@@ -761,14 +892,14 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
     
     let gf_price;
     if (gf_priceType === 'normal') {
-      gf_price = `$${PRICING[gf_product][gf_thickness][gf_render]} (Normal Price, ${gf_render}層)`;
+      gf_price = `$${PRICING[gf_product][gf_thickness]} (Normal Price)`;
     } else {
       const specialValue = document.getElementById('gf_specialPriceValue').value;
       if (!specialValue) {
         alert('請輸入 Ground Floor 特殊單價');
         return;
       }
-      gf_price = `$${specialValue} (Special Price, ${gf_render}層)`;
+      gf_price = `$${specialValue} (Special Price)`;
     }
     
     output += `Ground Floor：${gf_product} ${gf_thickness}\n`;
@@ -778,28 +909,29 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
     
     const gf_netArea = document.getElementById('gf_netArea').value;
     if (gf_netArea) {
-      output += `Ground Floor 淨面積：${gf_netArea} m²\n`;
+      const gf_quoteArea = (parseFloat(gf_netArea) * 1.1).toFixed(2);
+      output += `Ground Floor 淨面積：${gf_netArea} m² (報價面積：${gf_quoteArea} m²)\n`;
     }
-    output += `\n`;
+    
+    output += `\nGround Floor 描述：\n`;
+    output += generateProductDescription(gf_product, gf_thickness, gf_batten, gf_render);
+    output += `\n\n`;
     
     // First Floor
     const ff_material = document.getElementById('ff_material').value;
+    const ff_batten = document.querySelector('input[name="ff_batten"]:checked') ? document.querySelector('input[name="ff_batten"]:checked').value : null;
     const ff_render = document.querySelector('input[name="ff_render"]:checked').value;
     const ff_priceType = document.querySelector('input[name="ff_priceType"]:checked').value;
-    const isFoam = ff_material.includes('foam') || ff_material.includes('Greenboard');
-    const isAAC = ff_material.includes('Pro Panel') || ff_material.includes('Hebel');
     
     let ff_price;
-    
     if (ff_priceType === 'normal') {
-      if (isFoam) {
+      if (ff_material.includes('foam')) {
         const thickness = ff_material.includes('100mm') ? '100mm' : '75mm';
-        ff_price = `$${PRICING['Foam'][thickness]} (Normal Price, 3層固定)`;
-      } else if (isAAC) {
+        ff_price = `$${PRICING['Foam'][thickness]} (Normal Price)`;
+      } else {
         const product = ff_material.includes('Pro Panel') ? 'Pro Panel' : 'Hebel';
         const thickness = ff_material.includes('75mm') ? '75mm' : '50mm';
-        const basePrice = PRICING[product][thickness][ff_render];
-        ff_price = `$${basePrice + 2} (Normal Price, ${ff_render}層, 2樓+$2)`;
+        ff_price = `$${PRICING[product][thickness]} (Normal Price)`;
       }
     } else {
       const specialValue = document.getElementById('ff_specialPriceValue').value;
@@ -807,13 +939,11 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
         alert('請輸入 First Floor 特殊單價');
         return;
       }
-      let renderNote = isFoam ? '3層固定' : (isAAC ? ff_render + '層, 2樓' : ff_render + '層');
-      ff_price = `$${specialValue} (Special Price, ${renderNote})`;
+      ff_price = `$${specialValue} (Special Price)`;
     }
     
     output += `First Floor：${ff_material}\n`;
-    if (!isFoam) {
-      const ff_batten = document.querySelector('input[name="ff_batten"]:checked').value;
+    if (ff_batten) {
       output += `First Floor Batten：${ff_batten}\n`;
     }
     output += `First Floor Render：${ff_render}層\n`;
@@ -821,50 +951,131 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
     
     const ff_netArea = document.getElementById('ff_netArea').value;
     if (ff_netArea) {
-      output += `First Floor 淨面積：${ff_netArea} m²\n`;
+      const ff_quoteArea = (parseFloat(ff_netArea) * 1.1).toFixed(2);
+      output += `First Floor 淨面積：${ff_netArea} m² (報價面積：${ff_quoteArea} m²)\n`;
     }
+    
+    output += `\nFirst Floor 描述：\n`;
+    // 解析 ff_material 格式（例如："75mm Pro Panel" 或 "100mm NRG Greenboard foam"）
+    let ff_product, ff_thickness, ff_battenValue;
+    if (ff_material.includes('foam')) {
+      const match = ff_material.match(/(\d+mm)\s+(.+)/);
+      ff_thickness = match[1];
+      ff_product = match[2];
+      ff_battenValue = null;
+    } else {
+      const match = ff_material.match(/(\d+mm)\s+(.+)/);
+      ff_thickness = match[1];
+      ff_product = match[2];
+      ff_battenValue = ff_batten || '24mm';
+    }
+    output += generateProductDescription(ff_product, ff_thickness, ff_battenValue, ff_render);
   }
+  
+  // Blueboard（固定輸出）
+  output += `\n\nBlueboard：\n`;
+  output += `描述：Supply & Install & blueboards around garage opening and inside - Three coats rendering (Dulux) including two base coats with joint mesh and 1 colour coat\n`;
   
   output += `\nBuilder：${builder}\n`;
+  if (abn) {
+    output += `ABN：${abn}\n`;
+  }
   output += `地址：${address}\n`;
+  
+  // Payment Terms（有notes時用Note:標題，沒有時直接Payment Terms:）
   if (notes) {
-    output += `備註：${notes}\n`;
+    output += `\nNote:\n${notes}\n\n`;
   }
   
-  // 檢查是否有缺失的淨面積
-  let missingArea = false;
-  if (storey === 'Single Storey') {
-    missingArea = !document.getElementById('single_netArea').value;
-  } else {
-    const gf_area = document.getElementById('gf_netArea').value;
-    const ff_area = document.getElementById('ff_netArea').value;
-    if (!gf_area || !ff_area) {
-      missingArea = true;
-      output += `\n缺失淨面積：`;
-      if (!gf_area && !ff_area) {
-        output += `Ground Floor + First Floor`;
-      } else if (!gf_area) {
-        output += `Ground Floor`;
-      } else {
-        output += `First Floor`;
+  // 輸出 Payment Terms（如果不是 none）
+  if (paymentTerms !== 'none') {
+    output += `Payment Terms：\n`;
+  }
+  
+  if (paymentTerms === 'normal') {
+    if (storey === 'Single Storey') {
+      output += `40% Deposit\n`;
+      output += `30% upon completion of Panel installation\n`;
+      output += `30% upon completion of Render\n`;
+    } else {
+      output += `Progress Payment Terms (per level): Each level will be invoiced separately based on the following stage payments:\n`;
+      output += `- 40% Deposit\n`;
+      output += `- 30% upon completion of Panel installation\n`;
+      output += `- 30% upon completion of Render\n`;
+    }
+  } else if (paymentTerms === 'special') {
+    const installation = parseInt(document.getElementById('installationPercent').value) || 0;
+    const basecoat = parseInt(document.getElementById('basecoatPercent').value) || 0;
+    const texture = parseInt(document.getElementById('texturePercent').value) || 0;
+    
+    // 驗證總和必須等於 100
+    const total = installation + basecoat + texture;
+    if (total !== 100) {
+      alert(`Payment Terms 總和必須等於 100%（目前：${total}%）`);
+      return;
+    }
+    
+    if (storey === 'Single Storey') {
+      if (installation > 0) output += `${installation}% upon completion of installation\n`;
+      
+      // 如果 basecoat 和 texture 都有值，分開顯示；否則合併成 rendering
+      if (basecoat > 0 && texture > 0) {
+        output += `${basecoat}% upon completion of basecoat\n`;
+        output += `${texture}% upon completion of texture\n`;
+      } else if (basecoat > 0 || texture > 0) {
+        const renderingPercent = basecoat + texture;
+        output += `${renderingPercent}% upon completion of rendering\n`;
+      }
+    } else {
+      output += `Progress Payment Terms (per level): Each level will be invoiced separately based on the following stage payments:\n`;
+      if (installation > 0) output += `- ${installation}% upon completion of installation\n`;
+      
+      // 如果 basecoat 和 texture 都有值，分開顯示；否則合併成 rendering
+      if (basecoat > 0 && texture > 0) {
+        output += `- ${basecoat}% upon completion of basecoat\n`;
+        output += `- ${texture}% upon completion of texture\n`;
+      } else if (basecoat > 0 || texture > 0) {
+        const renderingPercent = basecoat + texture;
+        output += `- ${renderingPercent}% upon completion of rendering\n`;
       }
     }
+  } else if (paymentTerms === 'oneoff') {
+    output += `100% upon completion\n`;
+  } else if (paymentTerms === 'none') {
+    // None 選項：不輸出 payment terms
   }
   
-  output += `\n\n請製作報價單`;
-  if (missingArea) {
-    output += `\n（需從 email 檔案中查找淨面積）`;
-  }
+  // Other Items
+  const otherItems = document.querySelectorAll('.other-item');
+  let hasOtherItems = false;
+  otherItems.forEach((item, index) => {
+    const desc = item.querySelector('.other-desc').value.trim();
+    const units = item.querySelector('.other-units').value.trim();
+    const price = item.querySelector('.other-price').value.trim();
+    
+    if (desc && units && price) {
+      if (!hasOtherItems) {
+        output += `\nOther Items：\n`;
+        hasOtherItems = true;
+      }
+      output += `- ${desc} | Units: ${units} | Price: $${price}\n`;
+    }
+  });
+  
+  // Category（固定輸出）
+  output += `\nCategory: 4-9000\n`;
+  
+  output += `\n請製作報價單`;
   
   document.getElementById('outputText').textContent = output;
   document.getElementById('output').classList.add('show');
   document.getElementById('output').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 });
 
-// 重置表單
+// 重置表单
 document.getElementById('quoteForm').addEventListener('reset', function() {
   document.getElementById('output').classList.remove('show');
-  document.querySelector('.btn-copy').textContent = '複製';
+  document.querySelector('.btn-copy').textContent = '复制';
   document.querySelector('.btn-copy').classList.remove('copied');
   setTimeout(() => {
     updateSinglePrice();
@@ -874,24 +1085,28 @@ document.getElementById('quoteForm').addEventListener('reset', function() {
   }, 10);
 });
 
-// 複製到剪貼板
+// 复制到剪贴板
 function copyToClipboard() {
   const text = document.getElementById('outputText').textContent;
   navigator.clipboard.writeText(text).then(function() {
     const btn = document.querySelector('.btn-copy');
-    btn.textContent = '已複製 ✓';
+    btn.textContent = '已复制 ✓';
     btn.classList.add('copied');
     setTimeout(function() {
-      btn.textContent = '複製';
+      btn.textContent = '复制';
       btn.classList.remove('copied');
     }, 2000);
   });
 }
 
+// Cloudflare Worker 自動發送功能已移除
+// 改回手動複製報價內容發給 Muse
+
 // 初始化
 updateSinglePrice();
 updateGFPrice();
 updateFFPrice();
+updateFFBatten();
 updateFFRender();
 </script>
 </body>
