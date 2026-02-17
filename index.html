@@ -462,20 +462,20 @@ button {
         <label>材料類型</label>
         <select id="ff_material" name="ff_material">
           <optgroup label="AAC">
-            <option value="Pro Panel 50mm">Pro Panel 50mm</option>
-            <option value="Pro Panel 75mm">Pro Panel 75mm</option>
-            <option value="Hebel 50mm">CSR Hebel 50mm</option>
-            <option value="Hebel 75mm">CSR Hebel 75mm</option>
+            <option value="50mm Pro Panel">50mm Pro Panel</option>
+            <option value="75mm Pro Panel">75mm Pro Panel</option>
+            <option value="50mm Hebel">50mm CSR Hebel</option>
+            <option value="75mm Hebel">75mm CSR Hebel</option>
           </optgroup>
           <optgroup label="Foam">
-            <option value="NRG Greenboard 75mm">NRG Greenboard 75mm</option>
-            <option value="NRG Greenboard 100mm">NRG Greenboard 100mm</option>
-            <option value="Masterwall foam 75mm">Masterwall foam 75mm</option>
-            <option value="Masterwall foam 100mm">Masterwall foam 100mm</option>
-            <option value="Unitex foam 75mm">Unitex foam 75mm</option>
-            <option value="Unitex foam 100mm">Unitex foam 100mm</option>
-            <option value="Dulux foam 75mm">Dulux foam 75mm</option>
-            <option value="Dulux foam 100mm">Dulux foam 100mm</option>
+            <option value="75mm NRG Greenboard foam">75mm NRG Greenboard</option>
+            <option value="100mm NRG Greenboard foam">100mm NRG Greenboard</option>
+            <option value="75mm Masterwall foam">75mm Masterwall</option>
+            <option value="100mm Masterwall foam">100mm Masterwall</option>
+            <option value="75mm Unitex foam">75mm Unitex</option>
+            <option value="100mm Unitex foam">100mm Unitex</option>
+            <option value="75mm Dulux foam">75mm Dulux</option>
+            <option value="100mm Dulux foam">100mm Dulux</option>
           </optgroup>
         </select>
       </div>
@@ -621,8 +621,14 @@ button {
 <script>
 // 定价表
 const PRICING = {
-  'Pro Panel': { '50mm': 110, '75mm': 120 },
-  'Hebel': { '50mm': 120, '75mm': 130 },
+  'Pro Panel': {
+    '50mm': { '2層': { 'Ground': 110, 'First': 112 }, '3層': { 'Ground': 118, 'First': 120 } },
+    '75mm': { '2層': { 'Ground': 120, 'First': 122 }, '3層': { 'Ground': 128, 'First': 130 } }
+  },
+  'Hebel': {
+    '50mm': { '2層': { 'Ground': 120, 'First': 122 }, '3層': { 'Ground': 128, 'First': 130 } },
+    '75mm': { '2層': { 'Ground': 130, 'First': 132 }, '3層': { 'Ground': 138, 'First': 140 } }
+  },
   'Foam': { '75mm': 90, '100mm': 95 }
 };
 
@@ -670,10 +676,9 @@ function updateSinglePrice() {
   const render = document.querySelector('input[name="single_render"]:checked').value;
   const priceType = document.querySelector('input[name="single_priceType"]:checked').value;
   
-  let normalPrice = PRICING[product][thickness];
-  if (render === '3') {
-    normalPrice += 8; // 3層 render +$8
-  }
+  // Single Storey 視為 Ground Floor
+  const renderCoats = render + '層';
+  const normalPrice = PRICING[product][thickness][renderCoats]['Ground'];
   
   const priceDisplay = document.getElementById('single_priceDisplay');
   const specialPriceInput = document.getElementById('single_specialPriceInput');
@@ -699,10 +704,8 @@ function updateGFPrice() {
   const render = document.querySelector('input[name="gf_render"]:checked').value;
   const priceType = document.querySelector('input[name="gf_priceType"]:checked').value;
   
-  let normalPrice = PRICING[product][thickness];
-  if (render === '3') {
-    normalPrice += 8; // 3層 render +$8
-  }
+  const renderCoats = render + '層';
+  const normalPrice = PRICING[product][thickness][renderCoats]['Ground'];
   
   const priceDisplay = document.getElementById('gf_priceDisplay');
   const specialPriceInput = document.getElementById('gf_specialPriceInput');
@@ -737,17 +740,15 @@ function updateFFPrice() {
   const isAAC = material.includes('Pro Panel') || material.includes('Hebel');
   
   if (isAAC) {
-    // AAC: First Floor 比 Ground Floor 貴 $2
+    // AAC: First Floor
     const product = material.includes('Pro Panel') ? 'Pro Panel' : 'Hebel';
     const thickness = material.includes('75mm') ? '75mm' : '50mm';
-    normalPrice = PRICING[product][thickness] + 2; // First Floor AAC +$2
-    if (render === '3') {
-      normalPrice += 8; // 3層 render +$8
-    }
+    const renderCoats = render + '層';
+    normalPrice = PRICING[product][thickness][renderCoats]['First'];
   } else {
     // Foam (包括 NRG Greenboard, Masterwall, Unitex, Dulux)
     const thickness = material.includes('100mm') ? '100mm' : '75mm';
-    normalPrice = PRICING['Foam'][thickness]; // Foam 固定3層，價格已包含
+    normalPrice = PRICING['Foam'][thickness]; // Foam 無樓層價差
   }
   
   const priceDisplay = document.getElementById('ff_priceDisplay');
@@ -864,7 +865,10 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
     
     let price;
     if (priceType === 'normal') {
-      price = `$${PRICING[product][thickness]} (Normal Price)`;
+      // Single Storey 視為 Ground Floor
+      const renderCoats = render + '層';
+      const normalPrice = PRICING[product][thickness][renderCoats]['Ground'];
+      price = `$${normalPrice} (Normal Price)`;
     } else {
       const specialValue = document.getElementById('single_specialPriceValue').value;
       if (!specialValue) {
@@ -898,7 +902,9 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
     
     let gf_price;
     if (gf_priceType === 'normal') {
-      gf_price = `$${PRICING[gf_product][gf_thickness]} (Normal Price)`;
+      const renderCoats = gf_render + '層';
+      const normalPrice = PRICING[gf_product][gf_thickness][renderCoats]['Ground'];
+      gf_price = `$${normalPrice} (Normal Price)`;
     } else {
       const specialValue = document.getElementById('gf_specialPriceValue').value;
       if (!specialValue) {
@@ -936,9 +942,12 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
         const thickness = ff_material.includes('100mm') ? '100mm' : '75mm';
         ff_price = `$${PRICING['Foam'][thickness]} (Normal Price)`;
       } else {
+        // AAC: First Floor
         const product = ff_material.includes('Pro Panel') ? 'Pro Panel' : 'Hebel';
         const thickness = ff_material.includes('75mm') ? '75mm' : '50mm';
-        ff_price = `$${PRICING[product][thickness]} (Normal Price)`;
+        const renderCoats = ff_render + '層';
+        const normalPrice = PRICING[product][thickness][renderCoats]['First'];
+        ff_price = `$${normalPrice} (Normal Price)`;
       }
     } else {
       const specialValue = document.getElementById('ff_specialPriceValue').value;
@@ -949,7 +958,7 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
       ff_price = `$${specialValue} (Special Price)`;
     }
     
-    const ff_displayMaterial = ff_material.replace('Hebel', 'CSR Hebel');
+    const ff_displayMaterial = ff_material.replace(' foam', '').replace('Hebel', 'CSR Hebel');
     output += `First Floor：${ff_displayMaterial}\n`;
     if (ff_batten) {
       output += `First Floor Batten：${ff_batten}\n`;
@@ -970,10 +979,10 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
       const match = ff_material.match(/(\d+mm)\s+(.+)/);
       if (match) {
         ff_thickness = match[1];
-        ff_product = match[2];
+        ff_product = match[2].replace(' foam', '');  // 去掉 " foam"
       } else {
         ff_thickness = '75mm';
-        ff_product = ff_material;
+        ff_product = ff_material.replace(' foam', '');
       }
       ff_battenValue = null;
     } else {
