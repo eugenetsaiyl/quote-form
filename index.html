@@ -1026,70 +1026,71 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
   }
   output += `地址：${address}\n`;
   
-  // Payment Terms（有notes時用Note:標題，沒有時直接Payment Terms:）
-  if (notes) {
-    output += `\nNote:\n${notes}\n\n`;
-  }
-  
-  // 輸出 Payment Terms（如果不是 none）
-  if (paymentTerms !== 'none') {
-    if (!notes) {
-      output += `\n`;
-    }
-    output += `Payment Terms：\n`;
-  }
-  
-  if (paymentTerms === 'normal') {
-    if (storey === 'Single Storey') {
-      output += `40% Deposit\n`;
-      output += `30% upon completion of Panel installation\n`;
-      output += `30% upon completion of Render\n`;
-    } else {
-      output += `Progress Payment Terms (per level): Each level will be invoiced separately based on the following stage payments:\n`;
-      output += `- 40% Deposit\n`;
-      output += `- 30% upon completion of Panel installation\n`;
-      output += `- 30% upon completion of Render\n`;
-    }
-  } else if (paymentTerms === 'special') {
-    const installation = parseInt(document.getElementById('installationPercent').value) || 0;
-    const basecoat = parseInt(document.getElementById('basecoatPercent').value) || 0;
-    const texture = parseInt(document.getElementById('texturePercent').value) || 0;
+  // Note 區塊（統一標題，包含 notes + payment terms）
+  const hasNoteContent = notes || paymentTerms !== 'none';
+  if (hasNoteContent) {
+    output += `\nNote:\n`;
     
-    // 驗證總和必須等於 100
-    const total = installation + basecoat + texture;
-    if (total !== 100) {
-      alert(`Payment Terms 總和必須等於 100%（目前：${total}%）`);
-      return;
+    // 如果有 notes，先輸出
+    if (notes) {
+      output += `${notes}\n\n`;
     }
     
-    if (storey === 'Single Storey') {
-      if (installation > 0) output += `${installation}% upon completion of installation\n`;
+    // 如果有 payment terms，輸出
+    if (paymentTerms !== 'none') {
+      output += `Payment Terms：\n`;
       
-      // 如果 basecoat 和 texture 都有值，分開顯示；否則合併成 rendering
-      if (basecoat > 0 && texture > 0) {
-        output += `${basecoat}% upon completion of basecoat\n`;
-        output += `${texture}% upon completion of texture\n`;
-      } else if (basecoat > 0 || texture > 0) {
-        const renderingPercent = basecoat + texture;
-        output += `${renderingPercent}% upon completion of rendering\n`;
-      }
-    } else {
-      output += `Progress Payment Terms (per level): Each level will be invoiced separately based on the following stage payments:\n`;
-      if (installation > 0) output += `- ${installation}% upon completion of installation\n`;
-      
-      // 如果 basecoat 和 texture 都有值，分開顯示；否則合併成 rendering
-      if (basecoat > 0 && texture > 0) {
-        output += `- ${basecoat}% upon completion of basecoat\n`;
-        output += `- ${texture}% upon completion of texture\n`;
-      } else if (basecoat > 0 || texture > 0) {
-        const renderingPercent = basecoat + texture;
-        output += `- ${renderingPercent}% upon completion of rendering\n`;
+      if (paymentTerms === 'normal') {
+        if (storey === 'Single Storey') {
+          output += `40% Deposit\n`;
+          output += `30% upon completion of Panel installation\n`;
+          output += `30% upon completion of Render\n`;
+        } else {
+          output += `Progress Payment Terms (per level): Each level will be invoiced separately based on the following stage payments:\n`;
+          output += `- 40% Deposit\n`;
+          output += `- 30% upon completion of Panel installation\n`;
+          output += `- 30% upon completion of Render\n`;
+        }
+      } else if (paymentTerms === 'special') {
+        const installation = parseInt(document.getElementById('installationPercent').value) || 0;
+        const basecoat = parseInt(document.getElementById('basecoatPercent').value) || 0;
+        const texture = parseInt(document.getElementById('texturePercent').value) || 0;
+        
+        // 驗證總和必須等於 100
+        const total = installation + basecoat + texture;
+        if (total !== 100) {
+          alert(`Payment Terms 總和必須等於 100%（目前：${total}%）`);
+          return;
+        }
+        
+        if (storey === 'Single Storey') {
+          if (installation > 0) output += `${installation}% upon completion of installation\n`;
+          
+          // 如果 basecoat 和 texture 都有值，分開顯示；否則合併成 rendering
+          if (basecoat > 0 && texture > 0) {
+            output += `${basecoat}% upon completion of basecoat\n`;
+            output += `${texture}% upon completion of texture\n`;
+          } else if (basecoat > 0 || texture > 0) {
+            const renderingPercent = basecoat + texture;
+            output += `${renderingPercent}% upon completion of rendering\n`;
+          }
+        } else {
+          output += `Progress Payment Terms (per level): Each level will be invoiced separately based on the following stage payments:\n`;
+          if (installation > 0) output += `- ${installation}% upon completion of installation\n`;
+          
+          // 如果 basecoat 和 texture 都有值，分開顯示；否則合併成 rendering
+          if (basecoat > 0 && texture > 0) {
+            output += `- ${basecoat}% upon completion of basecoat\n`;
+            output += `- ${texture}% upon completion of texture\n`;
+          } else if (basecoat > 0 || texture > 0) {
+            const renderingPercent = basecoat + texture;
+            output += `- ${renderingPercent}% upon completion of rendering\n`;
+          }
+        }
+      } else if (paymentTerms === 'oneoff') {
+        output += `100% upon completion\n`;
       }
     }
-  } else if (paymentTerms === 'oneoff') {
-    output += `100% upon completion\n`;
-  } else if (paymentTerms === 'none') {
-    // None 選項：不輸出 payment terms
   }
   
   // Category（固定輸出）
