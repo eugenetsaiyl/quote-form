@@ -892,6 +892,7 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
     
     output += `\n描述：\n`;
     output += generateProductDescription(product, thickness, batten, render);
+    output += `\nCategory: 4-9000\n`;
   } else {
     // Ground Floor
     const gf_product = document.querySelector('input[name="gf_product"]:checked').value;
@@ -928,7 +929,8 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
     
     output += `\nGround Floor 描述：\n`;
     output += generateProductDescription(gf_product, gf_thickness, gf_batten, gf_render);
-    output += `\n\n`;
+    output += `\nCategory: 4-9000\n`;
+    output += `\n`;
     
     // First Floor
     const ff_material = document.getElementById('ff_material').value;
@@ -997,11 +999,13 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
       ff_battenValue = ff_batten || '24mm';
     }
     output += generateProductDescription(ff_product, ff_thickness, ff_battenValue, ff_render);
+    output += `\nCategory: 4-9000\n`;
   }
   
   // Blueboard（固定輸出）
   output += `\n\nBlueboard：\n`;
   output += `描述：Supply & Install & blueboards around garage opening and inside - Three coats rendering (Dulux) including two base coats with joint mesh and 1 colour coat\n`;
+  output += `Category: 4-9000\n`;
   
   // Other Items
   const otherItems = document.querySelectorAll('.other-item');
@@ -1017,6 +1021,7 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
         hasOtherItems = true;
       }
       output += `- ${desc} | Units: ${units} | Price: $${price}\n`;
+      output += `Category: 4-9000\n`;
     }
   });
   
@@ -1092,9 +1097,6 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
       }
     }
   }
-  
-  // Category（固定輸出）
-  output += `\nCategory: 4-9000\n`;
   
   output += `\n請製作報價單`;
   
