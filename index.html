@@ -841,18 +841,18 @@ function generateProductDescription(product, thickness, batten, renderCoats) {
   let line1, line2;
   
   if (isFoam) {
-    line1 = `Supply & install ${thickness} ${product} including sundries and delivery`;
-    line2 = `Three coats rendering (Dulux) including two base coats with full mesh and 1 colour coat`;
+    line1 = `- Supply & install ${thickness} ${product} including sundries and delivery`;
+    line2 = `- Three coats rendering (Dulux) including two base coats with full mesh and 1 colour coat`;
   } else {
     const coatsNum = renderCoats.replace('層', '');
     const baseCoats = coatsNum === '2' ? 'one base coat' : 'two base coats';
     const coatsText = coatsNum === '2' ? 'Two coats' : 'Three coats';
     
-    line1 = `Supply & install ${thickness} ${product} with ${batten} batten including sundries, caulking, and delivery`;
-    line2 = `${coatsText} rendering (Dulux) including ${baseCoats} with joint mesh and 1 colour coat`;
+    line1 = `- Supply & install ${thickness} ${product} with ${batten} batten including sundries, caulking, and delivery`;
+    line2 = `- ${coatsText} rendering (Dulux) including ${baseCoats} with joint mesh and 1 colour coat`;
   }
   
-  return `${line1} - ${line2}`;
+  return `${line1}\n${line2}`;
 }
 
 // 表单提交
@@ -1042,7 +1042,8 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
   if (includeBlueboard === 'yes') {
     output += `\n▼ 下一行 → Blueboard\n`;
     output += `Description:\n`;
-    output += `Supply & Install & blueboards around garage opening and inside - Three coats rendering (Dulux) including two base coats with joint mesh and 1 colour coat\n`;
+    output += `- Supply & Install blueboards around garage opening and inside\n`;
+    output += `- Three coats rendering (Dulux) including two base coats with joint mesh and 1 colour coat\n`;
     output += `Category: 4-9000\n`;
     output += `Units: 7\n`;
     output += `Unit Price: $45\n`;
