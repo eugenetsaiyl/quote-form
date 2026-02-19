@@ -872,7 +872,9 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
   if (abn) {
     output += `ABN: ${abn}\n`;
   }
-  output += `\nLine 1：\n`;
+  output += `\n=== MYOB Line Items 填寫 ===\n`;
+  output += `⚠️ 按順序填入 MYOB 的每一行（從第一行開始）\n\n`;
+  output += `▼ Line 1 → 地址\n`;
   output += `Description: ${address}\n`;
   output += `Category: 4-9000\n\n`;
   output += `層數：${storey}\n\n`;
@@ -902,6 +904,7 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
     const displayProduct = product === 'Hebel' ? 'CSR Hebel' : product;
     output += `產品：${displayProduct} ${thickness}, ${batten} batten, ${render}層 render\n\n`;
     
+    output += `▼ Line 2 → Ground Floor 產品\n`;
     output += `Description:\n`;
     output += generateProductDescription(product, thickness, batten, render);
     output += `\nCategory: 4-9000\n`;
@@ -941,6 +944,7 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
     const gf_displayProduct = gf_product === 'Hebel' ? 'CSR Hebel' : gf_product;
     output += `Ground Floor：${gf_displayProduct} ${gf_thickness}, ${gf_batten} batten, ${gf_render}層 render\n\n`;
     
+    output += `▼ Line 2 → Ground Floor 產品\n`;
     output += `Description:\n`;
     output += generateProductDescription(gf_product, gf_thickness, gf_batten, gf_render);
     output += `\nCategory: 4-9000\n`;
@@ -993,6 +997,7 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
       output += `First Floor：${ff_displayMaterial}, ${ff_batten} batten, ${ff_render}層 render\n\n`;
     }
     
+    output += `▼ Line 3 → First Floor 產品\n`;
     output += `Description:\n`;
     // 解析 ff_material 格式（例如："75mm Pro Panel" 或 "100mm NRG Greenboard foam"）
     let ff_product, ff_thickness, ff_battenValue;
@@ -1036,6 +1041,7 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
   const includeBlueboard = document.querySelector('input[name="includeBlueboard"]:checked').value;
   if (includeBlueboard === 'yes') {
     output += `\n\nBlueboard：\n\n`;
+    output += `▼ 下一行 → Blueboard\n`;
     output += `Description:\nSupply & Install & blueboards around garage opening and inside - Three coats rendering (Dulux) including two base coats with joint mesh and 1 colour coat\n`;
     output += `Category: 4-9000\n`;
     output += `Units: 7\n`;
@@ -1055,6 +1061,7 @@ document.getElementById('quoteForm').addEventListener('submit', function(e) {
         output += `\nOther Items：\n\n`;
         hasOtherItems = true;
       }
+      output += `▼ 下一行 → Other Item ${index + 1}\n`;
       output += `Description:\n${desc}\n`;
       output += `Category: 4-9000\n`;
       output += `Units: ${units}\n`;
